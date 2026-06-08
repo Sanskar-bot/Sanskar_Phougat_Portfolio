@@ -20,4 +20,7 @@ export default defineConfig({
       "@": "/src",
     },
   },
+  server: {
+    port: 8080,
+  },
 });
