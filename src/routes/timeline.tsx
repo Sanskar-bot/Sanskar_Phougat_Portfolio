@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, X, RefreshCw, AlertTriangle, ExternalLink,
@@ -19,12 +19,6 @@ const STATS_URL =
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 export const Route = createFileRoute("/timeline")({
-  head: () => ({
-    meta: [
-      { title: "Learning Timeline — Sanskar Phougat" },
-      { name: "description", content: "A complete archive of Sanskar Phougat's daily learning journey across cybersecurity, cryptography, and software engineering." },
-    ],
-  }),
   component: TimelinePage,
 });
 
@@ -362,6 +356,10 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 function TimelinePage() {
+  useEffect(() => {
+    document.title = "Learning Timeline — Sanskar Phougat";
+  }, []);
+
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<TimelineEntry | null>(null);
   const [diffFilter, setDiffFilter] = useState<string>("All");

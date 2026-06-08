@@ -12,12 +12,6 @@ import { CustomCursor } from "@/components/CustomCursor";
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 export const Route = createFileRoute("/story")({
-  head: () => ({
-    meta: [
-      { title: "Behind The Portfolio — Sanskar Phougat" },
-      { name: "description", content: "The personal story behind Sanskar Phougat's journey into cybersecurity, cryptography, and secure systems engineering." },
-    ],
-  }),
   component: StoryPage,
 });
 
@@ -1259,6 +1253,7 @@ function StoryFooter() {
 function StoryPage() {
   // Easter egg: console log on mount
   useEffect(() => {
+    document.title = "Behind The Portfolio — Sanskar Phougat";
     console.log(
       "%c👋 Hey, you found the console.\n%cIf you're curious enough to open DevTools on a portfolio page, we'd probably have a good conversation.\n\nsanskar.phougat@gmail.com",
       "font-size: 14px; font-weight: bold; color: #5af5c0;",
