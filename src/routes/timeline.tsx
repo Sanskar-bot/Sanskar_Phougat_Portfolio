@@ -17,17 +17,25 @@ const TIMELINE_URL =
 const STATS_URL =
   "https://raw.githubusercontent.com/Sanskar-bot/Daily-Learnings/main/portfolio-data/stats.json";
 
-// ── Route ─────────────────────────────────────────────────────────────────────
-export const Route = createFileRoute("/timeline")({
-  component: TimelinePage,
-});
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+const CYAN   = "oklch(0.82 0.18 170)";
+const GREEN  = "oklch(0.75 0.2 145)";
+const PURPLE = "oklch(0.7 0.22 320)";
+const DIM    = "oklch(0.50 0.03 220)";
+const FAINT  = "oklch(0.35 0.02 220)";
+const MONO   = "'JetBrains Mono', monospace";
+const SANS   = "'Space Grotesk', sans-serif";
 
-// ── Constants ─────────────────────────────────────────────────────────────────
 const DIFFICULTY_COLORS = {
   Beginner:     { text: "oklch(0.75 0.2 145)",  bg: "oklch(0.75 0.2 145 / 12%)",  border: "oklch(0.75 0.2 145 / 35%)"  },
   Intermediate: { text: "oklch(0.82 0.18 170)", bg: "oklch(0.82 0.18 170 / 12%)", border: "oklch(0.82 0.18 170 / 35%)" },
   Advanced:     { text: "oklch(0.7 0.22 320)",  bg: "oklch(0.7 0.22 320 / 12%)",  border: "oklch(0.7 0.22 320 / 35%)"  },
 };
+
+// ── Route ─────────────────────────────────────────────────────────────────────
+export const Route = createFileRoute("/timeline")({
+  component: TimelinePage,
+});
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-GB", {
@@ -43,6 +51,41 @@ function monthKey(dateStr: string) {
   const d = new Date(dateStr);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
+
+const getDayStyle = (entry: TimelineEntry | undefined) => {
+  if (!entry) return {};
+
+  if (entry.difficulty === "Advanced") {
+    return {
+      background: "oklch(0.7 0.22 320 / 30%)",
+      border: "1px solid oklch(0.7 0.22 320 / 80%)",
+      color: "oklch(0.7 0.22 320)",
+      boxShadow: "0 0 10px oklch(0.7 0.22 320 / 40%)",
+    };
+  }
+
+  // Cyan activity levels based on word count
+  if (entry.wordCount > 800) {
+    return {
+      background: "oklch(0.82 0.18 170 / 40%)",
+      border: "1px solid oklch(0.82 0.18 170 / 90%)",
+      color: "oklch(0.82 0.18 170)",
+      boxShadow: "0 0 12px oklch(0.82 0.18 170 / 50%)",
+    };
+  } else if (entry.wordCount > 300) {
+    return {
+      background: "oklch(0.82 0.18 170 / 25%)",
+      border: "1px solid oklch(0.82 0.18 170 / 60%)",
+      color: "oklch(0.82 0.18 170)",
+    };
+  } else {
+    return {
+      background: "oklch(0.82 0.18 170 / 10%)",
+      border: "1px solid oklch(0.82 0.18 170 / 30%)",
+      color: "oklch(0.82 0.18 170 / 80%)",
+    };
+  }
+};
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 function SkeletonCard() {
@@ -81,7 +124,8 @@ function EntryCard({
 
   return (
     <motion.div
-      className="flex gap-4"
+      id={`card-${entry.id}`}
+      className="flex gap-4 scroll-mt-28"
       initial={{ opacity: 0, x: -16 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.04, 1.2), ease: "easeOut" }}
@@ -112,7 +156,7 @@ function EntryCard({
         className="group relative flex-1 mb-4 text-left rounded-xl overflow-hidden focus:outline-none"
         style={{
           background: isSelected ? "oklch(0.13 0.04 260 / 90%)" : "oklch(0.10 0.03 260 / 85%)",
-          border: isSelected ? `1px solid ${dc.border}` : "1px solid oklch(0.22 0.04 260 / 60%)",
+          border: isSelected ? `1.5px solid ${dc.text}` : "1px solid oklch(0.22 0.04 260 / 60%)",
           boxShadow: isSelected ? `0 0 24px ${dc.text}18, 0 4px 32px oklch(0.04 0.02 260 / 60%)` : "none",
           backdropFilter: "blur(8px)",
           transition: "all 0.2s ease",
@@ -131,7 +175,7 @@ function EntryCard({
           <div className="flex items-center justify-between mb-2">
             <span
               className="text-[10px] font-semibold tracking-widest"
-              style={{ color: "oklch(0.50 0.03 220)", fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ color: "oklch(0.50 0.03 220)", fontFamily: MONO }}
             >
               {formatDate(entry.date)}
             </span>
@@ -171,7 +215,7 @@ function EntryCard({
                 </span>
               )}
             </div>
-            <span className="text-[9px] flex-shrink-0" style={{ color: "oklch(0.40 0.02 220)", fontFamily: "'JetBrains Mono', monospace" }}>
+            <span className="text-[9px] flex-shrink-0" style={{ color: "oklch(0.40 0.02 220)", fontFamily: MONO }}>
               {entry.wordCount.toLocaleString()} w
             </span>
           </div>
@@ -181,128 +225,423 @@ function EntryCard({
   );
 }
 
-// ── Detail Panel ──────────────────────────────────────────────────────────────
-function DetailPanel({ entry, onClose }: { entry: TimelineEntry | null; onClose: () => void }) {
-  useCallback(() => {
-    if (!entry) return;
-    const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", h);
-    return () => window.removeEventListener("keydown", h);
-  }, [entry, onClose]);
+// ── Details Panel ─────────────────────────────────────────────────────────────
+function DetailPanel({ entry }: { entry: TimelineEntry | null }) {
+  if (!entry) {
+    return (
+      <div 
+        className="rounded-xl p-6 text-center border border-dashed border-muted/30"
+        style={{ background: "oklch(0.10 0.03 260 / 60%)" }}
+      >
+        <BookOpen className="h-5 w-5 mx-auto mb-2 text-muted-foreground opacity-60" />
+        <p className="text-xs font-semibold mb-1" style={{ color: "oklch(0.60 0.03 220)" }}>Select a Date</p>
+        <p className="text-[10px] text-muted-foreground">Click any highlighted calendar date or list card to inspect detail logs.</p>
+      </div>
+    );
+  }
 
-  const dc = entry ? DIFFICULTY_COLORS[entry.difficulty] : DIFFICULTY_COLORS.Beginner;
+  const dc = DIFFICULTY_COLORS[entry.difficulty];
 
   return (
-    <AnimatePresence>
-      {entry && (
-        <motion.div
-          key="detail"
-          initial={{ opacity: 0, x: 32 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 32 }}
-          transition={{ type: "spring", stiffness: 340, damping: 36 }}
-          className="sticky top-24 flex flex-col rounded-2xl overflow-hidden"
+    <motion.div
+      key={entry.id}
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="rounded-xl p-5 border"
+      style={{
+        background: "oklch(0.11 0.03 260 / 80%)",
+        borderColor: dc.border,
+        boxShadow: `0 0 20px ${dc.text}10`,
+      }}
+    >
+      <div className="flex justify-between items-start mb-3">
+        <div className="flex items-center gap-2">
+          <Calendar className="h-3.5 w-3.5" style={{ color: dc.text }} />
+          <span className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: "oklch(0.50 0.03 220)", fontFamily: MONO }}>
+            {formatDate(entry.date)}
+          </span>
+        </div>
+        <span
+          className="text-[8px] font-bold px-2 py-0.5 rounded uppercase tracking-widest"
+          style={{ color: dc.text, background: dc.bg, border: `1px solid ${dc.border}` }}
+        >
+          {entry.difficulty}
+        </span>
+      </div>
+
+      <h3 className="text-sm font-bold text-white mb-3 leading-snug" style={{ fontFamily: SANS }}>
+        {entry.title}
+      </h3>
+
+      <div className="space-y-4">
+        <div>
+          <span className="text-[8px] font-bold uppercase tracking-widest block mb-1 text-muted-foreground" style={{ fontFamily: MONO }}>
+            // Summary
+          </span>
+          <p className="text-xs leading-relaxed text-muted-foreground whitespace-pre-line">
+            {entry.summary}
+          </p>
+        </div>
+
+        <div className="h-px style-border" style={{ background: "oklch(0.18 0.04 260 / 50%)" }} />
+
+        <div className="grid grid-cols-2 gap-3 text-[10px]" style={{ fontFamily: MONO }}>
+          <div>
+            <span className="text-muted-foreground block text-[9px] uppercase tracking-wider mb-1">// Word Count</span>
+            <span className="text-white font-semibold">{entry.wordCount} words</span>
+          </div>
+          <div>
+            <span className="text-muted-foreground block text-[9px] uppercase tracking-wider mb-1">// Source</span>
+            <span className="text-white truncate block">{entry.sourceFile}</span>
+          </div>
+        </div>
+
+        <div>
+          <span className="text-[8px] font-bold uppercase tracking-widest block mb-1.5 text-muted-foreground" style={{ fontFamily: MONO }}>
+            // Technologies & Tags
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {entry.tags.map((t) => (
+              <span 
+                key={t} 
+                className="px-2 py-0.5 rounded text-[9px]" 
+                style={{ 
+                  color: "oklch(0.82 0.18 170 / 85%)", 
+                  background: "oklch(0.82 0.18 170 / 08%)", 
+                  border: "1px solid oklch(0.82 0.18 170 / 22%)" 
+                }}
+              >
+                #{t}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <motion.a
+          href={entry.githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-[10px] font-bold uppercase tracking-widest"
           style={{
-            background: "oklch(0.09 0.03 260)",
-            border: `1px solid ${dc.border}`,
-            boxShadow: `0 0 40px ${dc.text}12, 0 20px 60px oklch(0.04 0.02 260 / 80%)`,
-            maxHeight: "calc(100vh - 8rem)",
+            background: "oklch(0.82 0.18 170 / 10%)",
+            border: `1px solid oklch(0.82 0.18 170 / 38%)`,
+            color: "oklch(0.82 0.18 170)",
+          }}
+          whileHover={{ background: "oklch(0.82 0.18 170 / 18%)" }}
+          whileTap={{ scale: 0.98 }}
+        >
+          View GitHub Commit <ExternalLink className="h-3 w-3" />
+        </motion.a>
+      </div>
+    </motion.div>
+  );
+}
+
+// ── Interactive Learning Calendar & Heatmap Sidebar ──────────────────────────
+function LearningCalendarSidebar({
+  entries,
+  selected,
+  setSelected,
+  currentMonth,
+  setCurrentMonth,
+  statsCalculations,
+  sorted,
+}: {
+  entries: TimelineEntry[] | undefined;
+  selected: TimelineEntry | null;
+  setSelected: (entry: TimelineEntry | null) => void;
+  currentMonth: Date;
+  setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
+  statsCalculations: any;
+  sorted: TimelineEntry[];
+}) {
+  const [viewMode, setViewMode] = useState<"calendar" | "heatmap">("calendar");
+  const [hoveredDay, setHoveredDay] = useState<{ entry: TimelineEntry; x: number; y: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Group entries by exact YYYY-MM-DD
+  const entriesByDate = useMemo(() => {
+    const map = new Map<string, TimelineEntry>();
+    if (!entries) return map;
+    entries.forEach((e) => {
+      map.set(e.date.split("T")[0], e);
+    });
+    return map;
+  }, [entries]);
+
+  // Generate calendar days
+  const daysInMonth = useMemo(() => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+
+    const days = [];
+    const startDayOfWeek = firstDay.getDay();
+    for (let i = 0; i < startDayOfWeek; i++) {
+      days.push(null);
+    }
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      days.push(new Date(year, month, d));
+    }
+    return days;
+  }, [currentMonth]);
+
+  // Generate heatmap weeks (columns)
+  const heatmapWeeks = useMemo(() => {
+    if (!entries) return [];
+    const latestDate = sorted && sorted.length > 0 ? new Date(sorted[0].date) : new Date();
+    const startDate = new Date(latestDate);
+    startDate.setDate(latestDate.getDate() - 17 * 7); // 18 weeks back
+    const startDay = startDate.getDay();
+    startDate.setDate(startDate.getDate() - startDay); // Align to Sunday
+
+    const weeks = [];
+    let currentDay = new Date(startDate);
+    for (let w = 0; w < 18; w++) {
+      const week = [];
+      for (let d = 0; d < 7; d++) {
+        week.push(new Date(currentDay));
+        currentDay.setDate(currentDay.getDate() + 1);
+      }
+      weeks.push(week);
+    }
+    return weeks;
+  }, [entries, sorted]);
+
+  const handlePrevMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+  };
+
+  const handleDayClick = (entry: TimelineEntry) => {
+    setSelected(entry);
+    const cardEl = document.getElementById(`card-${entry.id}`);
+    if (cardEl) {
+      cardEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  const handleMouseEnter = (e: React.MouseEvent, entry: TimelineEntry) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (rect) {
+      setHoveredDay({
+        entry,
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    }
+  };
+
+  return (
+    <div ref={containerRef} className="relative space-y-6">
+      {/* View Switcher Toggle */}
+      <div className="flex justify-between items-center rounded-xl p-1 border border-muted/30" style={{ background: "oklch(0.10 0.03 260 / 60%)" }}>
+        <button
+          onClick={() => setViewMode("calendar")}
+          className="flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all"
+          style={{
+            background: viewMode === "calendar" ? "oklch(0.82 0.18 170)" : "transparent",
+            color: viewMode === "calendar" ? "black" : "oklch(0.65 0.03 220)",
           }}
         >
-          {/* Glow top */}
-          <div className="h-px w-full flex-shrink-0" style={{ background: `linear-gradient(90deg, transparent, ${dc.text}, transparent)` }} />
+          Calendar View
+        </button>
+        <button
+          onClick={() => setViewMode("heatmap")}
+          className="flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all"
+          style={{
+            background: viewMode === "heatmap" ? "oklch(0.82 0.18 170)" : "transparent",
+            color: viewMode === "heatmap" ? "black" : "oklch(0.65 0.03 220)",
+          }}
+        >
+          Heatmap View
+        </button>
+      </div>
 
-          {/* Header */}
-          <div className="flex-shrink-0 px-5 py-4" style={{ borderBottom: "1px solid oklch(0.18 0.04 260 / 60%)" }}>
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="h-3 w-3 flex-shrink-0" style={{ color: dc.text }} />
-                  <span className="text-[9px] tracking-widest uppercase" style={{ color: "oklch(0.50 0.03 220)", fontFamily: "'JetBrains Mono', monospace" }}>
-                    {formatDate(entry.date)}
-                  </span>
-                  <span className="ml-auto text-[8px] font-bold px-2 py-0.5 rounded uppercase tracking-widest flex-shrink-0" style={{ color: dc.text, background: dc.bg, border: `1px solid ${dc.border}` }}>
-                    {entry.difficulty}
-                  </span>
-                </div>
-                <h2 className="text-sm font-bold leading-snug" style={{ color: "oklch(0.95 0.01 180)", fontFamily: "'Space Grotesk', sans-serif" }}>
-                  {entry.title}
-                </h2>
-              </div>
-              <motion.button
-                onClick={onClose}
-                className="flex-shrink-0 h-7 w-7 flex items-center justify-center rounded-full"
-                style={{ background: "oklch(0.15 0.03 260)" }}
-                whileHover={{ scale: 1.1, background: "oklch(0.20 0.04 260)" }}
-                whileTap={{ scale: 0.95 }}
-                aria-label="Close"
-              >
-                <X className="h-3.5 w-3.5" style={{ color: "oklch(0.60 0.03 220)" }} />
-              </motion.button>
-            </div>
+      {/* Calendar Panel */}
+      {viewMode === "calendar" ? (
+        <div className="rounded-xl p-4 border border-muted/30" style={{ background: "oklch(0.10 0.03 260 / 80%)" }}>
+          {/* Month Navigator */}
+          <div className="flex justify-between items-center mb-4">
+            <button onClick={handlePrevMonth} className="p-1 hover:text-white text-muted-foreground transition-colors font-bold text-sm">
+              &larr;
+            </button>
+            <span className="text-xs font-semibold text-white uppercase tracking-wider">
+              {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+            </span>
+            <button onClick={handleNextMonth} className="p-1 hover:text-white text-muted-foreground transition-colors font-bold text-sm">
+              &rarr;
+            </button>
           </div>
 
-          {/* Scrollable body */}
-          <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5" style={{ scrollbarWidth: "none" } as React.CSSProperties}>
-            {/* Summary */}
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <FileText className="h-3 w-3" style={{ color: dc.text }} />
-                <span className="text-[8px] font-bold tracking-widest uppercase" style={{ color: "oklch(0.45 0.02 220)" }}>Summary</span>
-              </div>
-              <p className="text-xs leading-relaxed whitespace-pre-line" style={{ color: "oklch(0.70 0.02 200)" }}>
-                {entry.summary}
-              </p>
-            </div>
+          {/* Weekdays */}
+          <div className="grid grid-cols-7 gap-1 text-center text-[9px] font-bold text-muted-foreground uppercase mb-2">
+            {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+              <div key={day}>{day}</div>
+            ))}
+          </div>
 
-            <div className="h-px" style={{ background: "oklch(0.18 0.04 260 / 60%)" }} />
+          {/* Grid of Days */}
+          <div className="grid grid-cols-7 gap-1">
+            {daysInMonth.map((date, idx) => {
+              if (!date) return <div key={`empty-${idx}`} />;
+              const dateKey = date.toISOString().split("T")[0];
+              const entry = entriesByDate.get(dateKey);
+              const isSel = selected?.id === entry?.id;
+              const dayStyle = getDayStyle(entry);
 
-            {/* Tags */}
-            <div>
-              <div className="flex items-center gap-2 mb-2.5">
-                <Tag className="h-3 w-3" style={{ color: dc.text }} />
-                <span className="text-[8px] font-bold tracking-widest uppercase" style={{ color: "oklch(0.45 0.02 220)" }}>Tags</span>
+              return (
+                <div key={dateKey} className="relative">
+                  <motion.button
+                    onClick={() => entry && handleDayClick(entry)}
+                    onMouseEnter={(e) => entry && handleMouseEnter(e, entry)}
+                    onMouseLeave={() => setHoveredDay(null)}
+                    disabled={!entry}
+                    className="w-8 h-8 rounded-md text-[10px] flex items-center justify-center font-medium transition-all"
+                    style={{
+                      background: "oklch(0.12 0.03 260)",
+                      color: entry ? "white" : "oklch(0.35 0.02 220)",
+                      border: "1px solid oklch(0.18 0.03 260)",
+                      ...dayStyle,
+                      ...(isSel ? { border: `1.5px solid oklch(0.82 0.18 170)`, boxShadow: `0 0 10px oklch(0.82 0.18 170)` } : {}),
+                    }}
+                    whileHover={entry ? { scale: 1.15 } : {}}
+                  >
+                    {date.getDate()}
+                  </motion.button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        /* Heatmap Panel */
+        <div className="rounded-xl p-4 border border-muted/30 overflow-x-auto scrollbar-hide" style={{ background: "oklch(0.10 0.03 260 / 80%)" }}>
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-3">// Heatmap Log (Last 18 Weeks)</span>
+            
+            <div className="flex gap-1.5">
+              <div className="flex flex-col justify-between text-[8px] text-muted-foreground pr-1 pt-1.5 h-20">
+                <span>Su</span>
+                <span>Tu</span>
+                <span>Th</span>
+                <span>Sa</span>
               </div>
-              <div className="flex flex-wrap gap-1.5">
-                {entry.tags.map((t) => (
-                  <span key={t} className="text-[10px] rounded-md px-2 py-1" style={{ color: "oklch(0.82 0.18 170 / 85%)", background: "oklch(0.82 0.18 170 / 08%)", border: "1px solid oklch(0.82 0.18 170 / 22%)" }}>
-                    #{t}
-                  </span>
+
+              <div className="flex gap-1">
+                {heatmapWeeks.map((week, wIdx) => (
+                  <div key={wIdx} className="flex flex-col gap-1">
+                    {week.map((date) => {
+                      const dateKey = date.toISOString().split("T")[0];
+                      const entry = entriesByDate.get(dateKey);
+                      const isSel = selected?.id === entry?.id;
+                      const dayStyle = getDayStyle(entry);
+
+                      return (
+                        <motion.button
+                          key={dateKey}
+                          onClick={() => entry && handleDayClick(entry)}
+                          onMouseEnter={(e) => entry && handleMouseEnter(e, entry)}
+                          onMouseLeave={() => setHoveredDay(null)}
+                          disabled={!entry}
+                          className="w-2.5 h-2.5 rounded-sm"
+                          style={{
+                            background: "oklch(0.12 0.03 260)",
+                            border: "1px solid oklch(0.15 0.03 260)",
+                            ...dayStyle,
+                            ...(isSel ? { border: `1px solid oklch(0.82 0.18 170)`, boxShadow: `0 0 4px oklch(0.82 0.18 170)` } : {}),
+                          }}
+                          whileHover={entry ? { scale: 1.3 } : {}}
+                        />
+                      );
+                    })}
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Stats */}
-            <div className="flex items-center gap-4 rounded-lg px-4 py-3" style={{ background: "oklch(0.12 0.03 260 / 60%)", border: "1px solid oklch(0.18 0.04 260 / 60%)" }}>
-              <div className="flex items-center gap-2">
-                <Zap className="h-3.5 w-3.5" style={{ color: dc.text }} />
-                <span className="text-xs" style={{ color: "oklch(0.60 0.03 220)" }}>
-                  <span className="font-bold mr-1" style={{ color: "oklch(0.92 0.01 180)", fontFamily: "'JetBrains Mono', monospace" }}>
-                    {entry.wordCount.toLocaleString()}
-                  </span>
-                  words
-                </span>
-              </div>
+            <div className="flex justify-end items-center gap-1.5 mt-3 text-[9px] text-muted-foreground">
+              <span>Less</span>
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "oklch(0.12 0.03 260)" }} />
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "oklch(0.82 0.18 170 / 10%)", border: "1px solid oklch(0.82 0.18 170 / 30%)" }} />
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "oklch(0.82 0.18 170 / 25%)", border: "1px solid oklch(0.82 0.18 170 / 60%)" }} />
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "oklch(0.82 0.18 170 / 40%)", border: "1px solid oklch(0.82 0.18 170 / 90%)" }} />
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "oklch(0.7 0.22 320 / 30%)", border: "1px solid oklch(0.7 0.22 320 / 80%)" }} />
+              <span>More</span>
             </div>
-
-            {/* GitHub */}
-            <motion.a
-              href={entry.githubUrl} target="_blank" rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2.5 rounded-xl py-3 text-[10px] font-bold uppercase tracking-widest"
-              style={{ background: "oklch(0.82 0.18 170 / 10%)", border: `1px solid oklch(0.82 0.18 170 / 38%)`, color: "oklch(0.82 0.18 170)", boxShadow: "0 0 16px oklch(0.82 0.18 170 / 08%)" }}
-              whileHover={{ background: "oklch(0.82 0.18 170 / 18%)", boxShadow: "0 0 28px oklch(0.82 0.18 170 / 22%)", scale: 1.01 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
-              </svg>
-              View on GitHub
-              <ExternalLink className="h-3 w-3 opacity-70" />
-            </motion.a>
           </div>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+
+      {/* Hover Info Tooltip */}
+      <AnimatePresence>
+        {hoveredDay && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 5 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="absolute z-50 p-3 rounded-lg border text-[10px] w-52 leading-relaxed pointer-events-none"
+            style={{
+              top: hoveredDay.y - 130,
+              left: Math.max(10, Math.min(130, hoveredDay.x - 104)),
+              background: "oklch(0.09 0.03 260 / 95%)",
+              borderColor: "oklch(0.25 0.04 260 / 80%)",
+              boxShadow: "0 8px 30px rgba(0,0,0,0.9)",
+              backdropFilter: "blur(6px)",
+            }}
+          >
+            <div className="font-semibold text-white truncate mb-1">{hoveredDay.entry.title}</div>
+            <div style={{ color: DIM }} className="mb-1">{formatDate(hoveredDay.entry.date)}</div>
+            <div className="flex gap-2 mb-1.5">
+              <span className="font-semibold" style={{ color: hoveredDay.entry.difficulty === "Advanced" ? PURPLE : CYAN }}>
+                {hoveredDay.entry.difficulty}
+              </span>
+              <span style={{ color: FAINT }}>•</span>
+              <span className="text-white">{hoveredDay.entry.wordCount} words</span>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {hoveredDay.entry.tags.slice(0, 3).map((t) => (
+                <span key={t} className="px-1.5 py-0.5 rounded text-[8px] bg-muted/20 text-muted-foreground font-mono">#{t}</span>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Monthly Learning Statistics */}
+      <div className="rounded-xl p-4 border border-muted/30 space-y-3" style={{ background: "oklch(0.10 0.03 260 / 60%)", fontFamily: MONO }}>
+        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block mb-1">// Streak & Logs Dashboard</span>
+        <div className="grid grid-cols-2 gap-2 text-[10px]">
+          <div className="p-2 rounded bg-muted/05 border border-muted/15">
+            <span style={{ color: DIM }} className="block">Current Streak</span>
+            <span className="text-sm font-bold text-white mt-1 block">{statsCalculations.currentStreak} Days</span>
+          </div>
+          <div className="p-2 rounded bg-muted/05 border border-muted/15">
+            <span style={{ color: DIM }} className="block">Longest Streak</span>
+            <span className="text-sm font-bold text-white mt-1 block">{statsCalculations.longestStreak} Days</span>
+          </div>
+          <div className="p-2 rounded bg-muted/05 border border-muted/15">
+            <span style={{ color: DIM }} className="block">Month Logs</span>
+            <span className="text-sm font-bold text-white mt-1 block">{statsCalculations.entriesThisMonth} Days</span>
+          </div>
+          <div className="p-2 rounded bg-muted/05 border border-muted/15">
+            <span style={{ color: DIM }} className="block">Month Words</span>
+            <span className="text-sm font-bold text-white mt-1 block">{statsCalculations.wordsThisMonth.toLocaleString()}</span>
+          </div>
+        </div>
+        <div className="p-2.5 rounded bg-muted/05 border border-muted/15 text-[10px] flex justify-between items-center">
+          <span style={{ color: DIM }}>Advanced Logs This Month</span>
+          <span className="text-xs font-bold" style={{ color: PURPLE }}>{statsCalculations.advancedThisMonth} Days</span>
+        </div>
+      </div>
+
+      {/* Details Panel content displaying here */}
+      <DetailPanel entry={selected} />
+    </div>
   );
 }
 
@@ -327,7 +666,7 @@ function StatsBar({ stats }: { stats: TimelineStats }) {
         >
           <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, oklch(0.82 0.18 170 / 45%), transparent)" }} />
           <Icon className="h-4 w-4 mb-1.5" style={{ color: "oklch(0.82 0.18 170 / 55%)" }} />
-          <span className="text-2xl font-bold leading-none" style={{ color: "oklch(0.85 0.16 195)", fontFamily: "'JetBrains Mono', monospace" }}>
+          <span className="text-2xl font-bold leading-none" style={{ color: "oklch(0.85 0.16 195)", fontFamily: MONO }}>
             {value}
           </span>
           <span className="mt-1 text-[9px] font-semibold tracking-widest uppercase text-center" style={{ color: "oklch(0.48 0.02 220)" }}>
@@ -380,6 +719,16 @@ function TimelinePage() {
 
   const sorted = useMemo(() => entries ? [...entries].reverse() : [], [entries]);
 
+  // Month navigation state
+  const [currentMonth, setCurrentMonth] = useState<Date>(() => new Date(2026, 5)); // Initialized to June 2026
+
+  useEffect(() => {
+    if (sorted && sorted.length > 0) {
+      const latestDate = new Date(sorted[0].date);
+      setCurrentMonth(new Date(latestDate.getFullYear(), latestDate.getMonth(), 1));
+    }
+  }, [sorted]);
+
   // All unique tags for filter
   const allTags = useMemo(() => {
     if (!entries) return [];
@@ -416,6 +765,69 @@ function TimelinePage() {
     return Array.from(map.entries());
   }, [filtered]);
 
+  const statsCalculations = useMemo(() => {
+    if (!entries || entries.length === 0) {
+      return { currentStreak: 0, longestStreak: 0, entriesThisMonth: 0, wordsThisMonth: 0, advancedThisMonth: 0 };
+    }
+
+    const chronological = [...entries].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    const dateSet = new Set(chronological.map(e => e.date.split("T")[0]));
+    
+    let currentStreak = 0;
+    let longestStreak = 0;
+    let tempStreak = 0;
+    
+    const uniqueDates = Array.from(dateSet).map(d => new Date(d));
+    
+    if (uniqueDates.length > 0) {
+      let prevDate: Date | null = null;
+      uniqueDates.forEach((date) => {
+        if (!prevDate) {
+          tempStreak = 1;
+        } else {
+          const diffTime = Math.abs(date.getTime() - prevDate.getTime());
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          if (diffDays === 1) {
+            tempStreak += 1;
+          } else if (diffDays > 1) {
+            tempStreak = 1;
+          }
+        }
+        if (tempStreak > longestStreak) {
+          longestStreak = tempStreak;
+        }
+        prevDate = date;
+      });
+
+      const latestEntryDateStr = chronological[chronological.length - 1].date.split("T")[0];
+      const latestEntryDate = new Date(latestEntryDateStr);
+      
+      let checkDate = new Date(latestEntryDate);
+      while (true) {
+        const checkKey = checkDate.toISOString().split("T")[0];
+        if (dateSet.has(checkKey)) {
+          currentStreak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+    }
+
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const monthEntries = entries.filter((e) => {
+      const d = new Date(e.date);
+      return d.getFullYear() === year && d.getMonth() === month;
+    });
+
+    const entriesThisMonth = monthEntries.length;
+    const wordsThisMonth = monthEntries.reduce((acc, e) => acc + e.wordCount, 0);
+    const advancedThisMonth = monthEntries.filter(e => e.difficulty === "Advanced").length;
+
+    return { currentStreak, longestStreak, entriesThisMonth, wordsThisMonth, advancedThisMonth };
+  }, [entries, currentMonth]);
+
   const isLoading = el || sl;
 
   return (
@@ -427,7 +839,7 @@ function TimelinePage() {
       <div className="pointer-events-none fixed inset-0 z-0" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 0%, oklch(0.15 0.05 280 / 40%) 0%, transparent 70%)" }} />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 pt-28 pb-20">
-        {/* Back link */}
+        {/* Back Link */}
         <motion.div initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} className="mb-8">
           <Link to="/" className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest transition-colors hover:text-primary" style={{ color: "oklch(0.50 0.03 220)" }}>
             <ArrowLeft className="h-3.5 w-3.5" />
@@ -435,19 +847,19 @@ function TimelinePage() {
           </Link>
         </motion.div>
 
-        {/* Page header */}
+        {/* Page Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
           <div className="flex items-center gap-3 mb-3">
             <div className="h-px w-8" style={{ background: "oklch(0.82 0.18 170 / 50%)" }} />
-            <span className="text-[9px] font-bold tracking-[0.35em] uppercase" style={{ color: "oklch(0.82 0.18 170 / 60%)", fontFamily: "'JetBrains Mono', monospace" }}>
+            <span className="text-[9px] font-bold tracking-[0.35em] uppercase" style={{ color: "oklch(0.82 0.18 170 / 60%)", fontFamily: MONO }}>
               ~/daily-learnings
             </span>
             <span className="flex items-center gap-1">
-              <span className="inline-block h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: "oklch(0.75 0.2 145)" }} />
-              <span className="text-[8px] tracking-widest uppercase" style={{ color: "oklch(0.55 0.03 220)", fontFamily: "'JetBrains Mono', monospace" }}>live</span>
+              <span className="inline-block h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: GREEN }} />
+              <span className="text-[8px] tracking-widest uppercase" style={{ color: "oklch(0.55 0.03 220)", fontFamily: MONO }}>live</span>
             </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <h1 className="text-4xl sm:text-5xl font-bold leading-tight" style={{ fontFamily: SANS }}>
             Learning <span className="text-gradient">Timeline</span>
           </h1>
           <p className="mt-3 text-sm max-w-xl" style={{ color: "oklch(0.60 0.03 220)" }}>
@@ -455,7 +867,7 @@ function TimelinePage() {
           </p>
         </motion.div>
 
-        {/* Stats */}
+        {/* Stats Bar */}
         {stats && !isLoading && <StatsBar stats={stats} />}
         {isLoading && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
@@ -465,9 +877,8 @@ function TimelinePage() {
           </div>
         )}
 
-        {/* Search + Filter bar */}
+        {/* Search & Filters */}
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex flex-col sm:flex-row gap-3 mb-8">
-          {/* Search */}
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "oklch(0.82 0.18 170 / 50%)" }} />
             <input
@@ -478,8 +889,8 @@ function TimelinePage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded-xl py-3 pl-10 pr-10 text-sm outline-none placeholder:text-muted-foreground transition-all"
-              style={{ background: "oklch(0.11 0.03 260 / 90%)", border: "1px solid oklch(0.25 0.04 260 / 60%)", color: "oklch(0.92 0.01 180)", fontFamily: "'JetBrains Mono', monospace" }}
-              onFocus={(e) => { e.currentTarget.style.border = "1px solid oklch(0.82 0.18 170 / 55%)"; e.currentTarget.style.boxShadow = "0 0 16px oklch(0.82 0.18 170 / 15%)"; }}
+              style={{ background: "oklch(0.11 0.03 260 / 90%)", border: "1px solid oklch(0.25 0.04 260 / 60%)", color: "oklch(0.92 0.01 180)", fontFamily: MONO }}
+              onFocus={(e) => { e.currentTarget.style.border = `1px solid ${CYAN}55`; e.currentTarget.style.boxShadow = `0 0 16px ${CYAN}15`; }}
               onBlur={(e) => { e.currentTarget.style.border = "1px solid oklch(0.25 0.04 260 / 60%)"; e.currentTarget.style.boxShadow = "none"; }}
             />
             {search && (
@@ -489,7 +900,6 @@ function TimelinePage() {
             )}
           </div>
 
-          {/* Filter button */}
           <motion.button
             onClick={() => setFilterOpen((v) => !v)}
             className="flex items-center gap-2 rounded-xl px-4 py-3 text-xs font-semibold uppercase tracking-widest flex-shrink-0 transition-all"
@@ -511,7 +921,7 @@ function TimelinePage() {
           </motion.button>
         </motion.div>
 
-        {/* Filter panel */}
+        {/* Dynamic Filters Panel */}
         <AnimatePresence>
           {filterOpen && (
             <motion.div
@@ -522,7 +932,6 @@ function TimelinePage() {
               className="overflow-hidden mb-6"
             >
               <div className="rounded-xl p-4 space-y-4" style={{ background: "oklch(0.10 0.03 260 / 90%)", border: "1px solid oklch(0.22 0.04 260 / 60%)" }}>
-                {/* Difficulty */}
                 <div>
                   <p className="text-[9px] font-bold tracking-widest uppercase mb-2" style={{ color: "oklch(0.45 0.02 220)" }}>Difficulty</p>
                   <div className="flex flex-wrap gap-2">
@@ -546,7 +955,6 @@ function TimelinePage() {
                   </div>
                 </div>
 
-                {/* Tags */}
                 <div>
                   <p className="text-[9px] font-bold tracking-widest uppercase mb-2" style={{ color: "oklch(0.45 0.02 220)" }}>Technology / Tag</p>
                   <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto" style={{ scrollbarWidth: "none" } as React.CSSProperties}>
@@ -567,7 +975,6 @@ function TimelinePage() {
                   </div>
                 </div>
 
-                {/* Clear */}
                 {(diffFilter !== "All" || tagFilter !== "All") && (
                   <button onClick={() => { setDiffFilter("All"); setTagFilter("All"); }} className="text-[9px] font-bold uppercase tracking-widest transition-colors hover:text-primary" style={{ color: "oklch(0.55 0.03 220)" }}>
                     ✕ Clear all filters
@@ -578,25 +985,26 @@ function TimelinePage() {
           )}
         </AnimatePresence>
 
-        {/* Result count */}
+        {/* Results Counter */}
         <AnimatePresence>
           {(search || diffFilter !== "All" || tagFilter !== "All") && !isLoading && (
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[10px] mb-5" style={{ color: "oklch(0.50 0.03 220)", fontFamily: "'JetBrains Mono', monospace" }}>
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[10px] mb-5" style={{ color: "oklch(0.50 0.03 220)", fontFamily: MONO }}>
               {filtered.length} result{filtered.length !== 1 ? "s" : ""} found
             </motion.p>
           )}
         </AnimatePresence>
 
-        {/* Main content */}
+        {/* Layout Grid */}
         {isLoading ? (
           <div className="grid lg:grid-cols-[1fr_360px] gap-6">
             <div>{Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}</div>
+            <div className="rounded-xl h-96 animate-pulse" style={{ background: "oklch(0.12 0.04 260)" }} />
           </div>
         ) : ee ? (
           <ErrorState onRetry={() => refetch()} />
         ) : (
           <div className="grid lg:grid-cols-[1fr_360px] gap-8 items-start">
-            {/* Left: Timeline */}
+            {/* Left: Interactive Timeline Card Stack */}
             <div>
               {grouped.length === 0 ? (
                 <div className="py-20 text-center">
@@ -604,7 +1012,6 @@ function TimelinePage() {
                 </div>
               ) : (
                 grouped.map(([key, group], gi) => {
-                  // global entry index for stagger
                   const prevCount = grouped.slice(0, gi).reduce((acc, [, g]) => acc + g.entries.length, 0);
                   return (
                     <motion.div
@@ -614,11 +1021,11 @@ function TimelinePage() {
                       transition={{ delay: gi * 0.05 }}
                       className="mb-8"
                     >
-                      {/* Month header */}
+                      {/* Month Header Banner */}
                       <div className="flex items-center gap-3 mb-4">
                         <span
                           className="text-xs font-bold tracking-widest uppercase"
-                          style={{ color: "oklch(0.82 0.18 170 / 70%)", fontFamily: "'JetBrains Mono', monospace" }}
+                          style={{ color: "oklch(0.82 0.18 170 / 70%)", fontFamily: MONO }}
                         >
                           {group.label}
                         </span>
@@ -644,23 +1051,17 @@ function TimelinePage() {
               )}
             </div>
 
-            {/* Right: Detail panel */}
-            <div>
-              <DetailPanel entry={selected} onClose={() => setSelected(null)} />
-              {!selected && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="rounded-xl p-6 text-center"
-                  style={{ background: "oklch(0.10 0.03 260 / 60%)", border: "1px solid oklch(0.18 0.04 260 / 50%)" }}
-                >
-                  <div className="h-10 w-10 rounded-full flex items-center justify-center mx-auto mb-3" style={{ background: "oklch(0.82 0.18 170 / 10%)", border: "1px solid oklch(0.82 0.18 170 / 25%)" }}>
-                    <BookOpen className="h-4 w-4" style={{ color: "oklch(0.82 0.18 170 / 60%)" }} />
-                  </div>
-                  <p className="text-xs font-semibold mb-1" style={{ color: "oklch(0.60 0.03 220)" }}>Select an entry</p>
-                  <p className="text-[10px]" style={{ color: "oklch(0.40 0.02 220)" }}>Click any card to view details</p>
-                </motion.div>
-              )}
+            {/* Right Sticky Sidebar: Interactive Learning Calendar & Heatmap Dashboard */}
+            <div className="sticky top-24">
+              <LearningCalendarSidebar
+                entries={entries}
+                selected={selected}
+                setSelected={setSelected}
+                currentMonth={currentMonth}
+                setCurrentMonth={setCurrentMonth}
+                statsCalculations={statsCalculations}
+                sorted={sorted}
+              />
             </div>
           </div>
         )}
