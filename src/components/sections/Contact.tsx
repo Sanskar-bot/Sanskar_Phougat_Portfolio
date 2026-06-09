@@ -11,7 +11,11 @@ export function Contact() {
   return (
     <section id="contact" className="relative py-32">
       <div className="mx-auto max-w-5xl px-6 text-center">
-        <p className="mb-4 text-xs uppercase tracking-[0.4em] text-primary">// 05 — Handshake</p>
+        <div className="mb-4 flex items-center justify-center gap-3">
+          <span className="h-px w-8 bg-primary opacity-50" />
+          <span className="text-xs uppercase tracking-[0.4em] text-primary">Get In Touch</span>
+          <span className="h-px w-8 bg-primary opacity-50" />
+        </div>
         <h2 className="text-5xl font-bold leading-tight sm:text-7xl">Let's <span className="text-gradient">connect.</span></h2>
         <p className="mx-auto mt-6 max-w-xl text-muted-foreground">Open to security research collaborations, internships and freelance offensive engagements. The fastest way to reach me is email.</p>
 

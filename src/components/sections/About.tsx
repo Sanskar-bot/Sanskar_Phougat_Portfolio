@@ -18,7 +18,10 @@ export function About() {
   return (
     <section id="about" ref={ref} className="relative py-32">
       <div className="mx-auto max-w-5xl px-6">
-        <p className="about-line mb-8 text-xs uppercase tracking-[0.4em] text-primary">// 02 — Whoami</p>
+        <div className="about-line mb-8 flex items-center gap-3">
+          <span className="h-px w-6 bg-primary opacity-70" />
+          <span className="text-xs uppercase tracking-[0.4em] text-primary">Whoami</span>
+        </div>
         <h2 className="about-line text-4xl font-bold leading-tight sm:text-6xl">
           I break things so <span className="text-gradient">they don't break later.</span>
         </h2>

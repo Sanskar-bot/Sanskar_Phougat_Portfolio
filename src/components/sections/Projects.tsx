@@ -56,7 +56,10 @@ export function Projects() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="mb-4 text-xs uppercase tracking-[0.4em] text-primary">// 03 — Selected work</p>
+            <div className="mb-4 flex items-center gap-3">
+              <span className="h-px w-6 bg-primary opacity-70" />
+              <span className="text-xs uppercase tracking-[0.4em] text-primary">Selected Work</span>
+            </div>
             <h2 className="text-4xl font-bold leading-tight sm:text-6xl">Things I've <span className="text-gradient">shipped.</span></h2>
           </div>
           <p className="max-w-sm text-sm text-muted-foreground">A mix of security tooling, applied cryptography and backend engineering.</p>

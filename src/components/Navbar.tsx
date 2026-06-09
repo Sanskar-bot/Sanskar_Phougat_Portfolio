@@ -116,8 +116,8 @@ export function Navbar() {
           {[
             { label: "Home",     hash: "#home"     },
             { label: "About",    hash: "#about"    },
-            { label: "Projects", hash: "#projects" },
             { label: "Skills",   hash: "#skills"   },
+            { label: "Projects", hash: "#projects" },
             { label: "Contact",  hash: "#contact"  },
           ].map(({ label, hash }) => (
             <li key={label}>
@@ -207,8 +207,8 @@ export function Navbar() {
               {[
                 { label: "Home",     hash: "#home"     },
                 { label: "About",    hash: "#about"    },
-                { label: "Projects", hash: "#projects" },
                 { label: "Skills",   hash: "#skills"   },
+                { label: "Projects", hash: "#projects" },
                 { label: "Contact",  hash: "#contact"  },
               ].map(({ label, hash }) => (
                 <a

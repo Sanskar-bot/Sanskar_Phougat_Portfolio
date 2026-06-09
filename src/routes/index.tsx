@@ -23,8 +23,8 @@ function Index() {
       <Navbar />
       <Hero />
       <About />
-      <Projects />
       <Skills />
+      <Projects />
       <Contact />
     </main>
   );
