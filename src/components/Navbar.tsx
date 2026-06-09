@@ -155,15 +155,27 @@ export function Navbar() {
           </li>
         </ul>
 
-        {/* ── Desktop CTA ───────────────────────────────────────────────── */}
-        <a
-          href={anchor("#contact")}
-          className={`rounded-full px-4 py-2 text-xs uppercase tracking-widest neon-border text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 md:inline-block hidden ${
-            modalOpen ? "opacity-0 pointer-events-none" : "opacity-100"
-          }`}
-        >
-          Get in touch
-        </a>
+        {/* ── Desktop CTAs ──────────────────────────────────────────────── */}
+        <div className={`hidden md:flex items-center gap-3 transition-opacity duration-200 ${
+          modalOpen ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}>
+          <a
+            href="/resume.pdf"
+            download="Sanskar_Phougat_Resume.pdf"
+            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs uppercase tracking-widest neon-border text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+          >
+            Resume
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-3 w-3">
+              <path fillRule="evenodd" d="M8 1a.75.75 0 0 1 .75.75v6.69l1.97-1.97a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.53a.75.75 0 0 1 1.06-1.06l1.97 1.97V1.75A.75.75 0 0 1 8 1ZM2.75 13a.75.75 0 0 0 0 1.5h10.5a.75.75 0 0 0 0-1.5H2.75Z" clipRule="evenodd" />
+            </svg>
+          </a>
+          <a
+            href={anchor("#contact")}
+            className="rounded-full px-4 py-2 text-xs uppercase tracking-widest neon-border text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+          >
+            Get in touch
+          </a>
+        </div>
 
         {/* ── Mobile hamburger ──────────────────────────────────────────── */}
         <button
@@ -238,6 +250,19 @@ export function Navbar() {
               >
                 Story
               </Link>
+
+              {/* Resume download — mobile */}
+              <a
+                href="/resume.pdf"
+                download="Sanskar_Phougat_Resume.pdf"
+                className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-primary"
+                onClick={() => setMobileOpen(false)}
+              >
+                Resume
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-3.5 w-3.5">
+                  <path fillRule="evenodd" d="M8 1a.75.75 0 0 1 .75.75v6.69l1.97-1.97a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.53a.75.75 0 0 1 1.06-1.06l1.97 1.97V1.75A.75.75 0 0 1 8 1ZM2.75 13a.75.75 0 0 0 0 1.5h10.5a.75.75 0 0 0 0-1.5H2.75Z" clipRule="evenodd" />
+                </svg>
+              </a>
             </div>
           </motion.div>
         )}

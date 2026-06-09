@@ -5,16 +5,11 @@ import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Category accent colors mapped to the portfolio's cyber palette
-const CYAN = "oklch(0.82 0.18 170)";
-const GREEN = "oklch(0.75 0.2 145)";
-const PURPLE = "oklch(0.7 0.22 320)";
-const AMBER = "oklch(0.80 0.18 75)";
+const GREEN = "#00e5a0";
 
 const groups = [
   {
     label: "Offensive Security",
-    accent: CYAN,
     items: [
       "Burp Suite",
       "Metasploit",
@@ -23,22 +18,24 @@ const groups = [
       "Ghidra",
       "radare2",
       "pwntools",
+      "mitmproxy",
       "Hashcat",
     ],
   },
   {
     label: "Languages",
-    accent: GREEN,
-    items: ["Python", "C / C++", "Rust", "TypeScript", "Solidity", "Bash", "Assembly"],
+    items: ["Python", "C/C++", "Rust", "TypeScript", "Java", "Bash", "Assembly", "Solidity"],
   },
   {
     label: "Cryptography",
-    accent: PURPLE,
-    items: ["AES-GCM", "Argon2id", "Curve25519", "zk-SNARKs", "TLS", "PKI", "WebCrypto"],
+    items: ["AES-256-GCM", "RSA-2048", "Argon2id", "SHA-256", "zk-SNARKs", "TLS", "PKI", "WebCrypto"],
   },
   {
-    label: "Infrastructure",
-    accent: AMBER,
+    label: "Frameworks & Backend",
+    items: ["Flask", "Spring Boot", "React", "Node.js", "REST API", "ML Inference"],
+  },
+  {
+    label: "Infra & DevOps",
     items: ["Linux", "Docker", "Kali Linux", "AWS", "Git", "Nginx", "PostgreSQL"],
   },
 ];
@@ -55,14 +52,15 @@ export function Skills() {
         ease: "power3.out",
         scrollTrigger: { trigger: ref.current, start: "top 75%" },
       });
+
       gsap.utils.toArray<HTMLElement>(".skill-group").forEach((group, i) => {
         gsap.from(group, {
           y: 40,
           opacity: 0,
-          duration: 0.7,
+          duration: 0.6,
           ease: "power3.out",
-          delay: i * 0.08,
-          scrollTrigger: { trigger: group, start: "top 88%" },
+          delay: i * 0.07,
+          scrollTrigger: { trigger: group, start: "top 90%" },
         });
       });
     },
@@ -70,93 +68,80 @@ export function Skills() {
   );
 
   return (
-    <section id="skills" ref={ref} className="relative py-32">
-      {/* Subtle background glow */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 55% 50% at 80% 40%, oklch(0.15 0.05 280 / 25%) 0%, transparent 70%)",
-        }}
-      />
+    <section id="skills" ref={ref} className="relative py-28">
+      <div className="relative z-10 mx-auto max-w-6xl px-6">
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6">
-        {/* Section header */}
-        <div className="skills-heading mb-16">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="h-px w-6 opacity-70" style={{ background: CYAN }} />
+        {/* ── Section header ─────────────────────────────────── */}
+        <div className="skills-heading mb-14">
+          <div className="mb-3 flex items-center gap-2">
             <span
-              className="text-xs uppercase tracking-[0.4em]"
-              style={{ color: CYAN }}
+              className="text-xs font-semibold uppercase tracking-[0.35em]"
+              style={{ color: GREEN }}
             >
               Toolkit
             </span>
+            <span style={{ color: GREEN, fontSize: "10px" }}>✦</span>
           </div>
-          <h2 className="text-4xl font-bold leading-tight sm:text-6xl">
-            Stack &amp; <span className="text-gradient">arsenal.</span>
+          <h2
+            className="text-5xl font-bold leading-tight sm:text-6xl"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.02em" }}
+          >
+            Stack &amp; <span style={{ color: GREEN }}>arsenal.</span>
           </h2>
-          <p className="mt-4 max-w-lg text-sm text-muted-foreground">
-            Tools, languages, and systems I use to research, build, and break things.
+          <p className="mt-4 max-w-md text-sm leading-relaxed" style={{ color: "oklch(0.65 0.03 220)" }}>
+            Technologies, tools, and frameworks I use to build, secure,
+            and ship impactful solutions.
           </p>
         </div>
 
-        {/* Category groups */}
-        <div className="space-y-14">
+        {/* ── Skill groups ───────────────────────────────────── */}
+        <div className="space-y-10">
           {groups.map((g) => (
             <div key={g.label} className="skill-group">
-              {/* Category header */}
-              <div className="mb-6 flex items-center gap-4">
-                {/* Glowing accent dot */}
+              {/* Category label + separator */}
+              <div className="mb-5 flex items-center gap-4">
                 <span
-                  className="h-2 w-2 rounded-full flex-shrink-0"
-                  style={{
-                    background: g.accent,
-                    boxShadow: `0 0 8px ${g.accent}, 0 0 16px ${g.accent}50`,
-                  }}
-                />
-                <span
-                  className="text-xs font-semibold uppercase tracking-[0.3em]"
-                  style={{ color: g.accent }}
+                  className="text-[11px] font-semibold uppercase tracking-[0.3em] whitespace-nowrap"
+                  style={{ color: GREEN }}
                 >
                   {g.label}
                 </span>
-                {/* Thin separator line */}
                 <div
                   className="h-px flex-1"
-                  style={{
-                    background: `linear-gradient(90deg, ${g.accent}40, transparent)`,
-                  }}
+                  style={{ background: "oklch(0.25 0.04 260 / 60%)" }}
                 />
               </div>
 
-              {/* Skill tile grid */}
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              {/* Skill tiles */}
+              <div className="flex flex-wrap gap-3">
                 {g.items.map((skill) => (
-                  <SkillTile key={skill} skill={skill} accent={g.accent} />
+                  <SkillTile key={skill} skill={skill} />
                 ))}
               </div>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );
 }
 
-function SkillTile({ skill, accent }: { skill: string; accent: string }) {
+function SkillTile({ skill }: { skill: string }) {
   return (
     <div
-      className="skill-tile group relative flex cursor-default select-none flex-col items-start justify-between overflow-hidden rounded-xl px-4 py-4 transition-all duration-200 hover:-translate-y-0.5"
+      className="group relative flex cursor-default select-none items-center justify-center rounded-xl px-6 py-4 transition-all duration-200 hover:-translate-y-0.5"
       style={{
         background: "oklch(0.11 0.03 260 / 70%)",
-        border: `1px solid oklch(0.25 0.04 260 / 60%)`,
+        border: "1px solid oklch(0.25 0.04 260 / 60%)",
         backdropFilter: "blur(8px)",
+        minWidth: "100px",
       }}
       onMouseEnter={(e) => {
         const el = e.currentTarget;
-        el.style.borderColor = `${accent}60`;
-        el.style.background = `oklch(0.13 0.04 260 / 80%)`;
-        el.style.boxShadow = `0 0 18px ${accent}15, 0 4px 16px oklch(0.05 0.02 260 / 40%)`;
+        el.style.borderColor = `${GREEN}50`;
+        el.style.background = "oklch(0.13 0.04 260 / 80%)";
+        el.style.boxShadow = `0 0 16px ${GREEN}18, 0 4px 16px oklch(0.05 0.02 260 / 40%)`;
       }}
       onMouseLeave={(e) => {
         const el = e.currentTarget;
@@ -165,27 +150,18 @@ function SkillTile({ skill, accent }: { skill: string; accent: string }) {
         el.style.boxShadow = "none";
       }}
     >
-      {/* Top accent line that glows on hover */}
+      {/* Top shimmer on hover */}
       <div
         className="pointer-events-none absolute left-0 right-0 top-0 h-px opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${accent}70, transparent)`,
-        }}
+        style={{ background: `linear-gradient(90deg, transparent, ${GREEN}60, transparent)` }}
       />
 
-      {/* Skill name */}
       <span
-        className="text-sm font-medium leading-snug text-foreground transition-colors duration-200 group-hover:text-white"
+        className="text-sm font-medium text-white"
         style={{ fontFamily: "'JetBrains Mono', monospace" }}
       >
         {skill}
       </span>
-
-      {/* Subtle bottom accent dot on hover */}
-      <span
-        className="mt-3 h-1 w-1 rounded-full opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-        style={{ background: accent }}
-      />
     </div>
   );
 }
