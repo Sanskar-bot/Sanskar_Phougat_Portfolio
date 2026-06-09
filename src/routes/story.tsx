@@ -842,82 +842,20 @@ function HeroSection() {
           that shaped the person behind the projects.
         </motion.p>
 
-        {/* Interactive terminal cursor easter egg */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="flex items-center gap-2"
-        >
-          <span className="text-xs" style={{ color: FAINT, fontFamily: MONO }}>
-            guest@portfolio:~/story$
-          </span>
-          <button
-            onClick={handleCursorClick}
-            title="Hmm… what happens if you click this three times?"
-            className="focus:outline-none"
-            aria-label="Terminal cursor"
-          >
-            <span
-              className="inline-block text-sm font-bold transition-all"
-              style={{
-                color: GREEN,
-                fontFamily: MONO,
-                opacity: blink ? 1 : 0,
-                textShadow: `0 0 12px ${GREEN}`,
-              }}
-            >
-              █
-            </span>
-          </button>
-          {easterCount > 0 && easterCount < 3 && (
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-[9px]"
-              style={{ color: FAINT, fontFamily: MONO }}
-            >
-              ({3 - easterCount} more…)
-            </motion.span>
-          )}
-        </motion.div>
-
-        {/* Easter egg reveal */}
-        <AnimatePresence>
-          {showSecret && (
-            <motion.div
-              initial={{ opacity: 0, y: 12, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 280, damping: 28 }}
-              className="mt-6 rounded-xl p-4 max-w-md"
-              style={{ background: "oklch(0.11 0.04 260)", border: `1px solid ${GREEN}30`, boxShadow: `0 0 24px ${GREEN}10` }}
-            >
-              <div className="flex items-start gap-3">
-                <Star className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" style={{ color: GREEN }} />
-                <div>
-                  <span className="text-[8px] font-bold tracking-widest uppercase block mb-1" style={{ color: `${GREEN}60`, fontFamily: MONO }}>
-                    // hidden fact unlocked
-                  </span>
-                  <p className="text-xs leading-relaxed" style={{ color: TEXT }}>{SECRET_FACTS[factIdx]}</p>
-                </div>
-                <button onClick={() => setShowSecret(false)} className="ml-auto text-xs opacity-40 hover:opacity-80 transition-opacity" style={{ color: MUTED }}>✕</button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {/* Scroll hint */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: [0, 6, 0] }}
+          transition={{
+            y: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+            opacity: { duration: 0.6, delay: 0.6 }
+          }}
           className="mt-16 flex items-center gap-3"
-          style={{ color: FAINT }}
+          style={{ color: GREEN }}
         >
-          <div className="h-px w-8" style={{ background: `${FAINT}60` }} />
-          <span className="text-[9px] uppercase tracking-[0.3em]" style={{ fontFamily: MONO }}>
-            scroll to read
+          <div className="h-px w-8" style={{ background: `${GREEN}60` }} />
+          <span className="text-[10px] uppercase tracking-[0.35em] font-semibold" style={{ fontFamily: MONO }}>
+            scroll to read ↓
           </span>
         </motion.div>
       </div>
