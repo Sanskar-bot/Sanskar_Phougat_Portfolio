@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const GREEN = "#00e5a0";
+const GREEN = "var(--neon-green)";
 
 const groups = [
   {
@@ -88,7 +88,7 @@ export function Skills() {
           >
             Stack &amp; <span style={{ color: GREEN }}>arsenal.</span>
           </h2>
-          <p className="mt-4 max-w-md text-sm leading-relaxed" style={{ color: "oklch(0.65 0.03 220)" }}>
+          <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
             Technologies, tools, and frameworks I use to build, secure,
             and ship impactful solutions.
           </p>
@@ -108,7 +108,7 @@ export function Skills() {
                 </span>
                 <div
                   className="h-px flex-1"
-                  style={{ background: "oklch(0.25 0.04 260 / 60%)" }}
+                  style={{ background: "var(--tile-separator)" }}
                 />
               </div>
 
@@ -132,32 +132,32 @@ function SkillTile({ skill }: { skill: string }) {
     <div
       className="group relative flex cursor-default select-none items-center justify-center rounded-xl px-6 py-4 transition-all duration-200 hover:-translate-y-0.5"
       style={{
-        background: "oklch(0.11 0.03 260 / 70%)",
-        border: "1px solid oklch(0.25 0.04 260 / 60%)",
+        background: "var(--tile-bg)",
+        border: "1px solid var(--tile-border)",
         backdropFilter: "blur(8px)",
         minWidth: "100px",
       }}
       onMouseEnter={(e) => {
         const el = e.currentTarget;
-        el.style.borderColor = `${GREEN}50`;
-        el.style.background = "oklch(0.13 0.04 260 / 80%)";
-        el.style.boxShadow = `0 0 16px ${GREEN}18, 0 4px 16px oklch(0.05 0.02 260 / 40%)`;
+        el.style.borderColor = `var(--neon-green)`;
+        el.style.background = "var(--tile-bg-hover)";
+        el.style.boxShadow = `0 0 16px oklch(from var(--neon-green) l c h / 15%), 0 4px 16px oklch(0.05 0.02 260 / 40%)`;
       }}
       onMouseLeave={(e) => {
         const el = e.currentTarget;
-        el.style.borderColor = "oklch(0.25 0.04 260 / 60%)";
-        el.style.background = "oklch(0.11 0.03 260 / 70%)";
+        el.style.borderColor = "var(--tile-border)";
+        el.style.background = "var(--tile-bg)";
         el.style.boxShadow = "none";
       }}
     >
       {/* Top shimmer on hover */}
       <div
         className="pointer-events-none absolute left-0 right-0 top-0 h-px opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-        style={{ background: `linear-gradient(90deg, transparent, ${GREEN}60, transparent)` }}
+        style={{ background: `linear-gradient(90deg, transparent, var(--neon-green), transparent)` }}
       />
 
       <span
-        className="text-sm font-medium text-white"
+        className="text-sm font-medium text-foreground"
         style={{ fontFamily: "'JetBrains Mono', monospace" }}
       >
         {skill}

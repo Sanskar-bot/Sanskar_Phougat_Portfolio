@@ -10,9 +10,9 @@ const STATS_URL =
   "https://raw.githubusercontent.com/Sanskar-bot/Daily-Learnings/main/portfolio-data/stats.json";
 
 const DIFFICULTY_COLORS = {
-  Beginner: "oklch(0.75 0.2 145)",
-  Intermediate: "oklch(0.82 0.18 170)",
-  Advanced: "oklch(0.7 0.22 320)",
+  Beginner:     "var(--token-green)",
+  Intermediate: "var(--token-cyan)",
+  Advanced:     "var(--token-purple)",
 };
 
 function formatDate(dateStr: string): string {
@@ -67,24 +67,24 @@ export function TimelinePreview() {
       {/* Terminal header */}
       <div className="flex items-center gap-2">
         <div className="flex gap-1.5">
-          <span className="inline-block h-2 w-2 rounded-full" style={{ background: "oklch(0.7 0.22 320)" }} />
+          <span className="inline-block h-2 w-2 rounded-full" style={{ background: "var(--token-purple)" }} />
           <span className="inline-block h-2 w-2 rounded-full" style={{ background: "oklch(0.82 0.18 75)" }} />
-          <span className="inline-block h-2 w-2 rounded-full" style={{ background: "oklch(0.75 0.2 145)" }} />
+          <span className="inline-block h-2 w-2 rounded-full" style={{ background: "var(--token-green)" }} />
         </div>
         <span
           className="text-[9px] font-semibold tracking-widest uppercase"
-          style={{ color: "oklch(0.40 0.02 220)", fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ color: "var(--token-dim)", fontFamily: "'JetBrains Mono', monospace" }}
         >
           ~/daily-log
         </span>
         <span className="ml-auto flex items-center gap-1">
           <span
             className="inline-block h-1.5 w-1.5 rounded-full animate-pulse"
-            style={{ background: "oklch(0.75 0.2 145)" }}
+            style={{ background: "var(--token-green)" }}
           />
           <span
             className="text-[8px] tracking-widest uppercase"
-            style={{ color: "oklch(0.55 0.03 220)", fontFamily: "'JetBrains Mono', monospace" }}
+            style={{ color: "var(--token-muted)", fontFamily: "'JetBrains Mono', monospace" }}
           >
             live
           </span>
@@ -95,16 +95,16 @@ export function TimelinePreview() {
       <div
         className="flex-1 flex flex-col rounded-xl overflow-hidden"
         style={{
-          background: "oklch(0.09 0.025 260 / 75%)",
-          border: "1px solid oklch(0.25 0.04 260 / 50%)",
+          background: "var(--glass-bg)",
+          border: "1px solid var(--glass-border)",
           backdropFilter: "blur(16px)",
-          boxShadow: "0 0 30px oklch(0.82 0.18 170 / 06%), inset 0 0 30px oklch(0.05 0.02 260 / 20%)",
+          boxShadow: "var(--shadow-card)",
         }}
       >
         {/* Top glow accent */}
         <div
           className="h-px w-full flex-shrink-0"
-          style={{ background: "linear-gradient(90deg, transparent, oklch(0.82 0.18 170 / 40%), transparent)" }}
+          style={{ background: "linear-gradient(90deg, transparent, var(--neon-cyan), transparent)", opacity: 0.4 }}
         />
 
         <div className="p-4 flex flex-col gap-4 flex-1">
@@ -115,7 +115,7 @@ export function TimelinePreview() {
                 <div
                   key={i}
                   className="rounded-lg h-14 animate-pulse"
-                  style={{ background: "oklch(0.14 0.03 260)" }}
+                  style={{ background: "var(--muted)" }}
                 />
               ))}
             </div>
@@ -129,24 +129,23 @@ export function TimelinePreview() {
                   transition={{ delay: 0.4 + i * 0.07 }}
                   className="relative flex flex-col items-center justify-center rounded-lg py-2.5 px-2 overflow-hidden"
                   style={{
-                    background: "oklch(0.12 0.04 260 / 80%)",
-                    border: "1px solid oklch(0.82 0.18 170 / 15%)",
+                    background: "var(--card)",
+                    border: "1px solid var(--border)",
                   }}
                 >
                   <div
                     className="absolute top-0 left-0 right-0 h-px"
-                    style={{ background: "linear-gradient(90deg, transparent, oklch(0.82 0.18 170 / 35%), transparent)" }}
+                    style={{ background: "linear-gradient(90deg, transparent, var(--neon-cyan), transparent)", opacity: 0.35 }}
                   />
-                  <Icon className="h-3 w-3 mb-1" style={{ color: "oklch(0.82 0.18 170 / 50%)" }} />
+                  <Icon className="h-3 w-3 mb-1 text-primary opacity-60" />
                   <span
-                    className="text-base font-bold leading-none"
-                    style={{ color: "oklch(0.85 0.16 195)", fontFamily: "'JetBrains Mono', monospace" }}
+                    className="text-base font-bold leading-none text-primary"
+                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
                   >
                     {value}
                   </span>
                   <span
-                    className="mt-0.5 text-[8px] font-semibold tracking-widest uppercase"
-                    style={{ color: "oklch(0.45 0.02 220)" }}
+                    className="mt-0.5 text-[8px] font-semibold tracking-widest uppercase text-muted-foreground"
                   >
                     {label}
                   </span>
@@ -156,25 +155,22 @@ export function TimelinePreview() {
           )}
 
           {/* Divider */}
-          <div
-            className="h-px w-full"
-            style={{ background: "oklch(0.2 0.04 260 / 60%)" }}
-          />
+          <div className="h-px w-full bg-border" />
 
           {/* Latest entry */}
           <div className="flex flex-col gap-2">
             <span
-              className="text-[8px] font-bold tracking-[0.3em] uppercase"
-              style={{ color: "oklch(0.45 0.02 220)", fontFamily: "'JetBrains Mono', monospace" }}
+              className="text-[8px] font-bold tracking-[0.3em] uppercase text-muted-foreground"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
               ▸ Latest Entry
             </span>
 
             {isLoading ? (
               <div className="space-y-2 animate-pulse">
-                <div className="h-2 w-24 rounded" style={{ background: "oklch(0.18 0.03 260)" }} />
-                <div className="h-3 w-full rounded" style={{ background: "oklch(0.18 0.03 260)" }} />
-                <div className="h-3 w-3/4 rounded" style={{ background: "oklch(0.15 0.03 260)" }} />
+                <div className="h-2 w-24 rounded bg-muted" />
+                <div className="h-3 w-full rounded bg-muted" />
+                <div className="h-3 w-3/4 rounded bg-border" />
               </div>
             ) : latest ? (
               <motion.div
@@ -183,14 +179,14 @@ export function TimelinePreview() {
                 transition={{ delay: 0.6 }}
                 className="rounded-lg p-3"
                 style={{
-                  background: "oklch(0.12 0.04 260 / 60%)",
-                  border: "1px solid oklch(0.25 0.04 260 / 50%)",
+                  background: "var(--card)",
+                  border: "1px solid var(--border)",
                 }}
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <span
-                    className="text-[9px] tracking-widest"
-                    style={{ color: "oklch(0.50 0.03 220)", fontFamily: "'JetBrains Mono', monospace" }}
+                    className="text-[9px] tracking-widest text-muted-foreground"
+                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
                   >
                     {formatDate(latest.date)}
                   </span>
@@ -198,17 +194,14 @@ export function TimelinePreview() {
                     className="text-[8px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-widest"
                     style={{
                       color: DIFFICULTY_COLORS[latest.difficulty],
-                      background: `${DIFFICULTY_COLORS[latest.difficulty]}18`,
-                      border: `1px solid ${DIFFICULTY_COLORS[latest.difficulty]}40`,
+                      background: `oklch(from ${DIFFICULTY_COLORS[latest.difficulty]} l c h / 18%)`,
+                      border: `1px solid oklch(from ${DIFFICULTY_COLORS[latest.difficulty]} l c h / 40%)`,
                     }}
                   >
                     {latest.difficulty}
                   </span>
                 </div>
-                <p
-                  className="text-xs font-semibold leading-snug line-clamp-2"
-                  style={{ color: "oklch(0.88 0.01 180)" }}
-                >
+                <p className="text-xs font-semibold leading-snug line-clamp-2 text-foreground">
                   {latest.title}
                 </p>
                 <div className="flex flex-wrap gap-1 mt-2">
@@ -217,9 +210,9 @@ export function TimelinePreview() {
                       key={tag}
                       className="text-[8px] rounded px-1.5 py-0.5"
                       style={{
-                        color: "oklch(0.82 0.18 170 / 70%)",
-                        background: "oklch(0.82 0.18 170 / 07%)",
-                        border: "1px solid oklch(0.82 0.18 170 / 18%)",
+                        color: "var(--token-cyan)",
+                        background: "oklch(from var(--token-cyan) l c h / 8%)",
+                        border: "1px solid oklch(from var(--token-cyan) l c h / 20%)",
                       }}
                     >
                       #{tag}
@@ -241,18 +234,18 @@ export function TimelinePreview() {
               to="/timeline"
               className="group flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-200"
               style={{
-                background: "oklch(0.82 0.18 170 / 10%)",
-                border: "1px solid oklch(0.82 0.18 170 / 35%)",
-                color: "oklch(0.82 0.18 170)",
-                boxShadow: "0 0 16px oklch(0.82 0.18 170 / 08%)",
+                background: "oklch(from var(--neon-cyan) l c h / 10%)",
+                border: "1px solid oklch(from var(--neon-cyan) l c h / 35%)",
+                color: "var(--neon-cyan)",
+                boxShadow: "0 0 16px oklch(from var(--neon-cyan) l c h / 8%)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "oklch(0.82 0.18 170 / 18%)";
-                e.currentTarget.style.boxShadow = "0 0 24px oklch(0.82 0.18 170 / 20%)";
+                e.currentTarget.style.background = "oklch(from var(--neon-cyan) l c h / 18%)";
+                e.currentTarget.style.boxShadow = "0 0 24px oklch(from var(--neon-cyan) l c h / 20%)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "oklch(0.82 0.18 170 / 10%)";
-                e.currentTarget.style.boxShadow = "0 0 16px oklch(0.82 0.18 170 / 08%)";
+                e.currentTarget.style.background = "oklch(from var(--neon-cyan) l c h / 10%)";
+                e.currentTarget.style.boxShadow = "0 0 16px oklch(from var(--neon-cyan) l c h / 8%)";
               }}
             >
               View Full Timeline

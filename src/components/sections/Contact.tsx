@@ -1,7 +1,8 @@
-import { FiGithub, FiLinkedin, FiMail, FiTarget } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiTarget } from "react-icons/fi";
+import { Mail } from "lucide-react";
 
 const socials = [
-  { icon: FiMail, label: "Email", value: "sanskarphougat2004@gmail.com", href: "https://mail.google.com/mail/?view=cm&to=sanskarphougat2004@gmail.com" },
+  { icon: Mail, label: "Email", value: "sanskarphougat2004@gmail.com", href: "https://mail.google.com/mail/?view=cm&to=sanskarphougat2004@gmail.com" },
   { icon: FiLinkedin, label: "LinkedIn", value: "sanskar-phougat", href: "https://linkedin.com/in/sanskar-phougat" },
   { icon: FiGithub, label: "GitHub", value: "Sanskar-bot", href: "https://github.com/Sanskar-bot" },
   { icon: FiTarget, label: "TryHackMe", value: "Sanskar2003", href: "https://tryhackme.com/p/Sanskar2003" },
@@ -29,7 +30,7 @@ export function Contact() {
               <s.icon className="h-6 w-6 text-primary" />
               <div>
                 <p className="text-xs uppercase tracking-widest text-muted-foreground">{s.label}</p>
-                <p className="mt-1 truncate font-semibold">{s.value}</p>
+                <p className="mt-1 break-all font-semibold text-sm">{s.value}</p>
               </div>
             </a>
           ))}

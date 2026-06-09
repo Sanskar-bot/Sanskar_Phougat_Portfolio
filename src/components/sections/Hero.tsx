@@ -6,12 +6,12 @@ export function Hero() {
 
   return (
     <section id="home" ref={root} className="relative min-h-screen overflow-hidden grid-bg">
-      {/* Radial gradient overlay — shifted left to highlight hero content */}
+      {/* Radial gradient overlay — theme-aware */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 80% at 25% 50%, oklch(0.15 0.05 280 / 55%) 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 80% at 25% 50%, var(--hero-overlay) 0%, transparent 70%)",
         }}
       />
 
@@ -55,7 +55,7 @@ export function Hero() {
               <p className="mt-1">TryHackMe Global</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-foreground">3+</p>
+              <p className="text-2xl font-bold text-foreground">7+</p>
               <p className="mt-1">Security tools shipped</p>
             </div>
             <div>

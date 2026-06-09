@@ -16,13 +16,13 @@ export const Route = createFileRoute("/story")({
 });
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
-const CYAN   = "oklch(0.82 0.18 170)";
+const CYAN   = "var(--neon-cyan)";
 const GREEN  = "oklch(0.75 0.2 145)";
 const PURPLE = "oklch(0.7 0.22 320)";
-const DIM    = "oklch(0.50 0.03 220)";
-const FAINT  = "oklch(0.35 0.02 220)";
-const TEXT   = "oklch(0.88 0.01 180)";
-const MUTED  = "oklch(0.65 0.03 220)";
+const DIM    = "var(--timeline-date-color)";
+const FAINT  = "var(--token-faint)";
+const TEXT   = "var(--foreground)";
+const MUTED  = "var(--muted-foreground)";
 const MONO   = "'JetBrains Mono', monospace";
 const SANS   = "'Space Grotesk', sans-serif";
 
@@ -91,7 +91,7 @@ function TerminalBlock({
     <div
       className="rounded-xl overflow-hidden"
       style={{
-        background: "oklch(0.09 0.025 260 / 80%)",
+        background: "var(--surface-1)",
         border: `1px solid oklch(0.22 0.04 260 / 70%)`,
         backdropFilter: "blur(12px)",
       }}
@@ -99,7 +99,7 @@ function TerminalBlock({
       {/* Chrome bar */}
       <div
         className="flex items-center gap-2 px-4 py-2.5"
-        style={{ borderBottom: "1px solid oklch(0.18 0.04 260 / 60%)", background: "oklch(0.10 0.03 260 / 80%)" }}
+        style={{ borderBottom: "1px solid var(--surface-border-light)", background: "var(--surface-3)" }}
       >
         <span className="h-2.5 w-2.5 rounded-full" style={{ background: PURPLE }} />
         <span className="h-2.5 w-2.5 rounded-full" style={{ background: "oklch(0.82 0.18 75)" }} />
@@ -128,8 +128,8 @@ function CalloutBox({
     <div
       className="rounded-xl p-5 my-4"
       style={{
-        background: `${accent}05`,
-        border: `1px solid ${accent}18`,
+        background: `color-mix(in oklch, ${accent} 1%, transparent)`,
+        border: `1px solid color-mix(in oklch, ${accent} 25%, transparent)`,
         borderLeft: `3px solid ${accent}`,
       }}
     >
@@ -151,7 +151,7 @@ function SectionHeading({ prompt, title, sub }: { prompt: string; title: string;
         <span className="text-[9px] font-bold tracking-[0.3em] uppercase" style={{ color: GREEN, fontFamily: MONO }}>
           {prompt}
         </span>
-        <div className="h-px w-12" style={{ background: `${GREEN}40` }} />
+        <div className="h-px w-12" style={{ background: `color-mix(in oklch, ${GREEN} 25%, transparent)` }} />
       </div>
       <h2 className="text-2xl sm:text-3xl font-bold leading-tight" style={{ fontFamily: SANS, color: TEXT }}>
         {title}
@@ -181,7 +181,7 @@ function SecretWord({ word, secret }: { word: string; secret: string }) {
     <span className="relative inline-block">
       <span
         className="cursor-help border-b border-dashed"
-        style={{ borderColor: `${GREEN}50`, color: GREEN }}
+        style={{ borderColor: `color-mix(in oklch, ${GREEN} 31%, transparent)`, color: GREEN }}
         onMouseEnter={() => setShow(true)}
         onMouseLeave={() => setShow(false)}
       >
@@ -195,7 +195,7 @@ function SecretWord({ word, secret }: { word: string; secret: string }) {
             exit={{ opacity: 0, y: -6, scale: 0.95 }}
             transition={{ duration: 0.18 }}
             className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 z-50 whitespace-nowrap rounded-md px-3 py-1.5 text-[10px] font-medium"
-            style={{ background: "oklch(0.12 0.04 260)", border: `1px solid ${GREEN}35`, color: TEXT, fontFamily: MONO, boxShadow: `0 0 16px ${GREEN}20` }}
+            style={{ background: "var(--surface-hover)", border: `1px solid ${GREEN}35`, color: TEXT, fontFamily: MONO, boxShadow: `0 0 16px ${GREEN}20` }}
           >
             {secret}
           </motion.span>
@@ -334,7 +334,7 @@ function StoryTableOfContents({ activeId, scrollProgress }: { activeId: string; 
       </span>
 
       {/* Progress track */}
-      <div className="absolute left-[3px] top-[32px] bottom-0 w-[1px]" style={{ background: "oklch(0.20 0.04 260 / 60%)" }} />
+      <div className="absolute left-[3px] top-[32px] bottom-0 w-[1px]" style={{ background: "var(--surface-divider)" }} />
       <div 
         className="absolute left-[3px] top-[32px] w-[1px] transition-all duration-100" 
         style={{ 
@@ -365,12 +365,12 @@ function StoryTableOfContents({ activeId, scrollProgress }: { activeId: string; 
                 className="absolute left-[1px] top-1/2 -translate-y-1/2 w-[5px] h-[5px] rounded-full border transition-all duration-300"
                 style={{
                   background: isActive ? GREEN : "transparent",
-                  borderColor: isActive ? GREEN : "oklch(0.35 0.02 220)",
+                  borderColor: isActive ? GREEN : "var(--token-faint)",
                   boxShadow: isActive ? `0 0 8px ${GREEN}` : "none",
                   transform: isActive ? "translateY(-50%) scale(1.25)" : "translateY(-50%) scale(1)",
                 }}
               />
-              <span className="transition-all duration-200 group-hover:text-white group-hover:translate-x-1 inline-block">
+              <span className="transition-all duration-200 group-hover:text-foreground group-hover:translate-x-1 inline-block">
                 {sec.label}
               </span>
             </a>
@@ -390,7 +390,7 @@ function MobileTOC({ activeId }: { activeId: string }) {
       <button
         onClick={() => setOpen(true)}
         className="fixed bottom-6 right-6 z-40 lg:hidden flex items-center gap-2 rounded-full px-5 py-3 text-xs uppercase tracking-widest font-semibold neon-border glass text-primary shadow-lg"
-        style={{ background: "oklch(0.11 0.03 260 / 95%)", borderColor: GREEN }}
+        style={{ background: "var(--surface-overlay)", borderColor: GREEN }}
       >
         <Menu className="h-4 w-4" /> Contents
       </button>
@@ -403,7 +403,7 @@ function MobileTOC({ activeId }: { activeId: string }) {
               animate={{ opacity: 0.5 }}
               exit={{ opacity: 0 }}
               onClick={() => setOpen(false)}
-              className="fixed inset-0 z-45 bg-black/60 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-45 bg-foreground/40 backdrop-blur-sm lg:hidden"
             />
             <motion.div
               initial={{ x: "100%" }}
@@ -411,7 +411,7 @@ function MobileTOC({ activeId }: { activeId: string }) {
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.25 }}
               className="fixed right-0 top-0 bottom-0 z-50 w-72 max-w-full p-6 glass flex flex-col justify-between lg:hidden"
-              style={{ background: "oklch(0.10 0.03 260)", borderLeft: `1px solid oklch(0.25 0.04 260 / 60%)` }}
+              style={{ background: "var(--surface-sidebar)", borderLeft: "1px solid var(--surface-sidebar-border)" }}
             >
               <div>
                 <div className="flex items-center justify-between mb-6">
@@ -434,7 +434,7 @@ function MobileTOC({ activeId }: { activeId: string }) {
                         style={{
                           color: isActive ? GREEN : MUTED,
                           borderColor: isActive ? GREEN : "transparent",
-                          background: isActive ? "oklch(0.12 0.04 260 / 50%)" : "transparent",
+                          background: isActive ? "var(--surface-active)" : "transparent",
                         }}
                       >
                         {sec.label}
@@ -454,7 +454,7 @@ function MobileTOC({ activeId }: { activeId: string }) {
 // ── 3. RecruiterSnapshot ─────────────────────────────────────────────────────
 function RecruiterSnapshot() {
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <SectionHeading
         prompt="> identity --snapshot"
         title="Quick Profile"
@@ -464,18 +464,18 @@ function RecruiterSnapshot() {
         className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-6 text-xs"
         style={{ fontFamily: MONO }}
       >
-        <div className="rounded-xl p-5 border" style={{ background: "oklch(0.10 0.03 260 / 70%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+        <div className="rounded-xl p-5 border" style={{ background: "var(--surface-2)", borderColor: "var(--border)" }}>
           <span className="text-[10px] uppercase tracking-widest block mb-3 font-semibold" style={{ color: GREEN }}>// Core Identity</span>
           <div className="space-y-2">
-            <div><span style={{ color: DIM }}>Name:</span> <span className="text-white font-semibold">Sanskar Phougat</span></div>
-            <div><span style={{ color: DIM }}>Degree:</span> <span className="text-white">B.Tech ECE (JIIT '26)</span></div>
-            <div><span style={{ color: DIM }}>Learning:</span> <span className="text-white">Build-first, project-driven</span></div>
+            <div><span style={{ color: DIM }}>Name:</span> <span className="text-foreground font-semibold">Sanskar Phougat</span></div>
+            <div><span style={{ color: DIM }}>Degree:</span> <span className="text-foreground">B.Tech ECE (JIIT '26)</span></div>
+            <div><span style={{ color: DIM }}>Learning:</span> <span className="text-foreground">Build-first, project-driven</span></div>
           </div>
         </div>
 
-        <div className="rounded-xl p-5 border" style={{ background: "oklch(0.10 0.03 260 / 70%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+        <div className="rounded-xl p-5 border" style={{ background: "var(--surface-2)", borderColor: "var(--border)" }}>
           <span className="text-[10px] uppercase tracking-widest block mb-3 font-semibold" style={{ color: GREEN }}>// Focus Areas</span>
-          <ul className="space-y-1.5 text-white">
+          <ul className="space-y-1.5 text-foreground">
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Cybersecurity</li>
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Cryptography</li>
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Secure Systems</li>
@@ -483,9 +483,9 @@ function RecruiterSnapshot() {
           </ul>
         </div>
 
-        <div className="rounded-xl p-5 border" style={{ background: "oklch(0.10 0.03 260 / 70%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+        <div className="rounded-xl p-5 border" style={{ background: "var(--surface-2)", borderColor: "var(--border)" }}>
           <span className="text-[10px] uppercase tracking-widest block mb-3 font-semibold" style={{ color: GREEN }}>// Current Interests</span>
-          <ul className="space-y-1.5 text-white">
+          <ul className="space-y-1.5 text-foreground">
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Offensive Security</li>
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Zero Knowledge Systems</li>
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Identity & Auth</li>
@@ -493,9 +493,9 @@ function RecruiterSnapshot() {
           </ul>
         </div>
 
-        <div className="rounded-xl p-5 border" style={{ background: "oklch(0.10 0.03 260 / 70%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+        <div className="rounded-xl p-5 border" style={{ background: "var(--surface-2)", borderColor: "var(--border)" }}>
           <span className="text-[10px] uppercase tracking-widest block mb-3 font-semibold" style={{ color: GREEN }}>// Key Strengths</span>
-          <ul className="space-y-1.5 text-white">
+          <ul className="space-y-1.5 text-foreground">
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Fast learner</li>
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Deep tech curiosity</li>
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Strong self-learning</li>
@@ -503,11 +503,11 @@ function RecruiterSnapshot() {
           </ul>
         </div>
 
-        <div className="rounded-xl p-5 border" style={{ background: "oklch(0.10 0.03 260 / 70%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+        <div className="rounded-xl p-5 border" style={{ background: "var(--surface-2)", borderColor: "var(--border)" }}>
           <span className="text-[10px] uppercase tracking-widest block mb-3 font-semibold" style={{ color: GREEN }}>// Major Project</span>
           <div>
-            <span className="text-white font-semibold flex items-center gap-1.5">
-              VaultZero <span className="text-[9px] px-1.5 py-0.5 rounded" style={{ background: `${PURPLE}18`, color: PURPLE }}>Active</span>
+            <span className="text-foreground font-semibold flex items-center gap-1.5">
+              VaultZero <span className="text-[9px] px-1.5 py-0.5 rounded" style={{ background: `color-mix(in oklch, ${PURPLE} 9%, transparent)`, color: PURPLE }}>Active</span>
             </span>
             <p className="text-muted-foreground mt-2 text-[11px] leading-relaxed">
               Zero-knowledge E2E encrypted password manager built to master secrets storage.
@@ -515,9 +515,9 @@ function RecruiterSnapshot() {
           </div>
         </div>
 
-        <div className="rounded-xl p-5 border" style={{ background: "oklch(0.10 0.03 260 / 70%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+        <div className="rounded-xl p-5 border" style={{ background: "var(--surface-2)", borderColor: "var(--border)" }}>
           <span className="text-[10px] uppercase tracking-widest block mb-3 font-semibold" style={{ color: GREEN }}>// Open To</span>
-          <ul className="space-y-1.5 text-white">
+          <ul className="space-y-1.5 text-foreground">
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Internships</li>
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Security Engineering</li>
             <li className="flex items-center gap-2"><span className="h-1 w-1 rounded-full" style={{ background: GREEN }} /> Backend Engineering</li>
@@ -543,7 +543,7 @@ function PersonalTimeline() {
   ];
 
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <SectionHeading
         prompt="> traceroute journey.hop"
         title="Personal Timeline"
@@ -561,7 +561,7 @@ function PersonalTimeline() {
               <span className="text-[9px] font-bold tracking-widest text-muted-foreground block mb-0.5" style={{ fontFamily: MONO }}>
                 STEP 0{i + 1}
               </span>
-              <h4 className="text-sm font-semibold text-white uppercase tracking-wider">{m.label}</h4>
+              <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider">{m.label}</h4>
               <p className="text-xs text-muted-foreground mt-1 leading-relaxed max-w-xl">{m.desc}</p>
             </div>
           </div>
@@ -582,7 +582,7 @@ function DefinitionCards() {
   ];
 
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <SectionHeading
         prompt="> cat config/principles.yaml"
         title="What Defines Me"
@@ -594,11 +594,11 @@ function DefinitionCards() {
             key={d.title}
             className="rounded-xl p-5 border transition-all duration-200 hover:-translate-y-0.5"
             style={{
-              background: "oklch(0.10 0.03 260 / 60%)",
-              borderColor: "oklch(0.20 0.04 260 / 50%)",
+              background: "var(--surface-2)",
+              borderColor: "var(--border)",
             }}
           >
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-2" style={{ color: GREEN }}>
+            <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-2" style={{ color: GREEN }}>
               {d.title}
             </h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -623,7 +623,7 @@ function CurrentlyExploring() {
   ];
 
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <SectionHeading
         prompt="> tail -n 10 exploration.log"
         title="What I'm Building & Exploring"
@@ -635,22 +635,22 @@ function CurrentlyExploring() {
             key={item.area}
             className="rounded-xl p-4 border flex flex-col justify-between"
             style={{
-              background: "oklch(0.10 0.03 260 / 70%)",
-              borderColor: "oklch(0.20 0.04 260 / 50%)",
+              background: "var(--surface-2)",
+              borderColor: "var(--border)",
             }}
           >
             <div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-[9px] uppercase font-bold px-2 py-0.5 rounded animate-pulse" style={{ background: `${GREEN}12`, color: GREEN, border: `1px solid ${GREEN}25` }}>
+                <span className="text-[9px] uppercase font-bold px-2 py-0.5 rounded animate-pulse" style={{ background: `color-mix(in oklch, ${GREEN} 7%, transparent)`, color: GREEN, border: `1px solid ${GREEN}25` }}>
                   {item.status}
                 </span>
               </div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-2">
+              <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-2">
                 {item.area}
               </h4>
             </div>
             <p className="text-[10px] text-muted-foreground leading-relaxed mt-4" style={{ borderTop: "1px solid oklch(0.18 0.04 260 / 50%)", paddingTop: "8px" }}>
-              <span className="text-white">//</span> {item.progress}
+              <span className="text-foreground">//</span> {item.progress}
             </p>
           </div>
         ))}
@@ -662,7 +662,7 @@ function CurrentlyExploring() {
 // ── 7. FunFactsSection ────────────────────────────────────────────────────────
 function FunFactsSection() {
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <SectionHeading
         prompt="> cat facts/misc.md"
         title="Fun Facts"
@@ -674,12 +674,12 @@ function FunFactsSection() {
             key={i}
             className="rounded-xl p-4 border"
             style={{
-              background: "oklch(0.10 0.03 260 / 70%)",
-              borderColor: "oklch(0.20 0.04 260 / 50%)",
+              background: "var(--surface-2)",
+              borderColor: "var(--border)",
             }}
           >
             <span className="text-[9px] text-muted-foreground block mb-2">// Fact #0{i + 1}</span>
-            <p className="text-xs text-white leading-relaxed">{fact}</p>
+            <p className="text-xs text-foreground leading-relaxed">{fact}</p>
           </div>
         ))}
       </div>
@@ -690,7 +690,7 @@ function FunFactsSection() {
 // ── 8. WorkWithMe ────────────────────────────────────────────────────────────
 function WorkWithMe() {
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <SectionHeading
         prompt="> cat collab_spec.md"
         title="Work With Me"
@@ -698,30 +698,30 @@ function WorkWithMe() {
       />
       <div className="grid gap-6 sm:grid-cols-2 mt-6" style={{ fontFamily: MONO }}>
         {/* What I enjoy */}
-        <div className="rounded-xl p-5 border" style={{ background: "oklch(0.10 0.03 260 / 70%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
-          <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+        <div className="rounded-xl p-5 border" style={{ background: "var(--surface-2)", borderColor: "var(--border)" }}>
+          <h4 className="text-xs font-bold text-foreground uppercase tracking-widest mb-4 flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: GREEN }} />
             What I Enjoy
           </h4>
           <ul className="space-y-2.5 text-xs text-muted-foreground">
-            <li><span className="text-white">Security Engineering</span> — building cryptographic trust systems, threat modeling, API hardening</li>
-            <li><span className="text-white">Backend Systems</span> — scaling services, memory safety, designing clean protocols</li>
-            <li><span className="text-white">Research Projects</span> — threat actor infrastructure analysis, OSINT scraping</li>
-            <li><span className="text-white">Developer Tools</span> — building local debuggers, parsers, ciphers, CLI utilities</li>
+            <li><span className="text-foreground">Security Engineering</span> — building cryptographic trust systems, threat modeling, API hardening</li>
+            <li><span className="text-foreground">Backend Systems</span> — scaling services, memory safety, designing clean protocols</li>
+            <li><span className="text-foreground">Research Projects</span> — threat actor infrastructure analysis, OSINT scraping</li>
+            <li><span className="text-foreground">Developer Tools</span> — building local debuggers, parsers, ciphers, CLI utilities</li>
           </ul>
         </div>
 
         {/* What I'm looking for */}
-        <div className="rounded-xl p-5 border" style={{ background: "oklch(0.10 0.03 260 / 70%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
-          <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+        <div className="rounded-xl p-5 border" style={{ background: "var(--surface-2)", borderColor: "var(--border)" }}>
+          <h4 className="text-xs font-bold text-foreground uppercase tracking-widest mb-4 flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: GREEN }} />
             What I'm Looking For
           </h4>
           <ul className="space-y-2.5 text-xs text-muted-foreground">
-            <li><span className="text-white">Internship Roles</span> — security engineering, backend dev, or research placements</li>
-            <li><span className="text-white">Open Source Work</span> — contributing to security tools, protocols, privacy tech</li>
-            <li><span className="text-white">Security-focused Teams</span> — engineering teams prioritizing architectural security</li>
-            <li><span className="text-white">Intense Technical Problems</span> — low-level, cryptographically heavy, or protocol challenges</li>
+            <li><span className="text-foreground">Internship Roles</span> — security engineering, backend dev, or research placements</li>
+            <li><span className="text-foreground">Open Source Work</span> — contributing to security tools, protocols, privacy tech</li>
+            <li><span className="text-foreground">Security-focused Teams</span> — engineering teams prioritizing architectural security</li>
+            <li><span className="text-foreground">Intense Technical Problems</span> — low-level, cryptographically heavy, or protocol challenges</li>
           </ul>
         </div>
       </div>
@@ -774,7 +774,7 @@ function HeroSection() {
       {/* Background glow */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
-        style={{ background: "radial-gradient(ellipse 70% 60% at 40% 40%, oklch(0.15 0.05 280 / 50%) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse 70% 60% at 40% 40%, var(--hero-overlay) 0%, transparent 70%)" }}
       />
 
       <div className="relative z-10 mx-auto max-w-5xl px-6 pt-32 pb-20">
@@ -806,13 +806,13 @@ function HeroSection() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="flex items-center gap-3 mb-6"
         >
-          <div className="h-px w-10" style={{ background: `${GREEN}50` }} />
-          <span className="text-[9px] font-bold tracking-[0.35em] uppercase" style={{ color: `${GREEN}80`, fontFamily: MONO }}>
+          <div className="h-px w-10" style={{ background: `color-mix(in oklch, ${GREEN} 31%, transparent)` }} />
+          <span className="text-[9px] font-bold tracking-[0.35em] uppercase" style={{ color: `color-mix(in oklch, ${GREEN} 50%, transparent)`, fontFamily: MONO }}>
             ~/personal/story.log
           </span>
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: GREEN }} />
-            <span className="text-[8px] uppercase tracking-widest" style={{ color: `${GREEN}80`, fontFamily: MONO }}>
+            <span className="text-[8px] uppercase tracking-widest" style={{ color: `color-mix(in oklch, ${GREEN} 50%, transparent)`, fontFamily: MONO }}>
               unfiltered
             </span>
           </span>
@@ -853,7 +853,7 @@ function HeroSection() {
           className="mt-16 flex items-center gap-3"
           style={{ color: GREEN }}
         >
-          <div className="h-px w-8" style={{ background: `${GREEN}60` }} />
+          <div className="h-px w-8" style={{ background: `color-mix(in oklch, ${GREEN} 37%, transparent)` }} />
           <span className="text-[10px] uppercase tracking-[0.35em] font-semibold" style={{ fontFamily: MONO }}>
             scroll to read ↓
           </span>
@@ -866,7 +866,7 @@ function HeroSection() {
 // ── Section 1: Introduction (About Me) ─────────────────────────────────────────
 function IntroSection() {
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <Reveal>
         <SectionHeading
           prompt="> section_01.init()"
@@ -923,7 +923,7 @@ function IntroSection() {
 // ── Section 2: Why ECE (ECE to Security) ───────────────────────────────────────
 function WhyECESection() {
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <Reveal>
         <SectionHeading
           prompt="> cat why_ece.txt"
@@ -959,7 +959,7 @@ function WhyECESection() {
 // ── Section 3: How I Discovered Cybersecurity ─────────────────────────────────
 function DiscoverySection() {
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <Reveal>
         <SectionHeading
           prompt="> grep -r 'origin' ./security"
@@ -1008,7 +1008,7 @@ function DiscoverySection() {
               >
                 <div className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: layer.c, boxShadow: `0 0 6px ${layer.c}` }} />
                 <div className="flex-1">
-                  <span className="text-[11px] font-semibold text-white">{layer.label}</span>
+                  <span className="text-[11px] font-semibold text-foreground">{layer.label}</span>
                   <span className="ml-2 text-[9px]" style={{ color: FAINT, fontFamily: MONO }}>// {layer.note}</span>
                 </div>
               </motion.div>
@@ -1025,7 +1025,7 @@ function JourneySection() {
   const [active, setActive] = useState<number | null>(null);
 
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <Reveal>
         <SectionHeading
           prompt="> git log --oneline journey"
@@ -1051,23 +1051,23 @@ function JourneySection() {
                   <motion.div
                     className="absolute -left-[3.05rem] top-3.5 flex h-7.5 w-7.5 items-center justify-center rounded-full cursor-pointer z-10"
                     style={{
-                      background: isOpen ? `${GREEN}18` : "oklch(0.10 0.03 260)",
-                      border: `2px solid ${isOpen ? GREEN : `${GREEN}40`}`,
+                      background: isOpen ? `color-mix(in oklch, ${GREEN} 9%, transparent)` : "var(--surface-sidebar)",
+                      border: `2px solid ${isOpen ? GREEN : `color-mix(in oklch, ${GREEN} 25%, transparent)`}`,
                       boxShadow: isOpen ? `0 0 12px ${GREEN}30` : "none",
                     }}
                     whileHover={{ scale: 1.12, boxShadow: `0 0 16px ${GREEN}40` }}
                     transition={{ type: "spring", stiffness: 380, damping: 22 }}
                     onClick={() => setActive(isOpen ? null : i)}
                   >
-                    <Icon className="h-3 w-3" style={{ color: isOpen ? GREEN : `${GREEN}70` }} />
+                    <Icon className="h-3 w-3" style={{ color: isOpen ? GREEN : `color-mix(in oklch, ${GREEN} 43%, transparent)` }} />
                   </motion.div>
 
                   {/* Card */}
                   <motion.div
                     className="rounded-xl overflow-hidden cursor-pointer"
                     style={{
-                      background: isOpen ? "oklch(0.12 0.04 260 / 90%)" : "oklch(0.10 0.03 260 / 70%)",
-                      border: `1px solid ${isOpen ? `${GREEN}35` : "oklch(0.20 0.04 260 / 50%)"}`,
+                      background: isOpen ? "var(--surface-2)" : "var(--surface-2)",
+                      border: `1px solid ${isOpen ? `color-mix(in oklch, ${GREEN} 20%, transparent)` : "var(--border)"}`,
                       transition: "all 0.2s ease",
                     }}
                     onClick={() => setActive(isOpen ? null : i)}
@@ -1075,10 +1075,10 @@ function JourneySection() {
                   >
                     <div className="flex items-center justify-between px-4 py-2.5">
                       <div className="flex items-center gap-3">
-                        <span className="text-[9px] font-bold" style={{ color: `${GREEN}70`, fontFamily: MONO }}>
+                        <span className="text-[9px] font-bold" style={{ color: `color-mix(in oklch, ${GREEN} 43%, transparent)`, fontFamily: MONO }}>
                           {stage.num}
                         </span>
-                        <span className="text-xs font-semibold text-white">{stage.title}</span>
+                        <span className="text-xs font-semibold text-foreground">{stage.title}</span>
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0 ml-4">
                         <span className="text-[9px]" style={{ color: FAINT, fontFamily: MONO }}>{stage.period}</span>
@@ -1101,7 +1101,7 @@ function JourneySection() {
                             <p className="pt-3 text-xs leading-relaxed text-muted-foreground">{stage.story}</p>
                             <div
                               className="flex items-start gap-2 rounded-lg px-3 py-2"
-                              style={{ background: `${GREEN}05`, border: `1px solid ${GREEN}15` }}
+                              style={{ background: `color-mix(in oklch, ${GREEN} 1%, transparent)`, border: `1px solid ${GREEN}15` }}
                             >
                               <Zap className="h-3 w-3 mt-0.5 flex-shrink-0" style={{ color: GREEN }} />
                               <p className="text-[11px] leading-snug" style={{ color: TEXT }}>
@@ -1127,7 +1127,7 @@ function JourneySection() {
 // ── Section 5: TryHackMe ──────────────────────────────────────────────────────
 function TryHackMeSection() {
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <Reveal>
         <SectionHeading
           prompt="> ssh tryhackme@lab"
@@ -1166,7 +1166,7 @@ function TryHackMeSection() {
                   <span style={{ color: DIM }}>Global Rank</span>
                   <span style={{ color: GREEN }}>Top 15%</span>
                 </div>
-                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "oklch(0.15 0.03 260)" }}>
+                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "var(--muted)" }}>
                   <motion.div
                     className="h-full rounded-full"
                     style={{ background: GREEN, boxShadow: `0 0 8px ${GREEN}` }}
@@ -1188,7 +1188,7 @@ function TryHackMeSection() {
                     <span style={{ color: DIM }}>{s.label}</span>
                     <span style={{ color: CYAN }}>{s.pct}%</span>
                   </div>
-                  <div className="h-1 rounded-full overflow-hidden" style={{ background: "oklch(0.15 0.03 260)" }}>
+                  <div className="h-1 rounded-full overflow-hidden" style={{ background: "var(--muted)" }}>
                     <motion.div
                       className="h-full rounded-full"
                       style={{ background: CYAN }}
@@ -1241,7 +1241,7 @@ function ProjectsSection() {
   ];
 
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <Reveal>
         <SectionHeading
           prompt="> ls -la ./projects"
@@ -1258,7 +1258,7 @@ function ProjectsSection() {
               <div
                 className="rounded-xl p-5"
                 style={{
-                  background: "oklch(0.10 0.03 260 / 80%)",
+                  background: "var(--surface-3)",
                   border: `1px solid ${p.color}25`,
                   borderLeft: `3px solid ${p.color}`,
                 }}
@@ -1272,14 +1272,14 @@ function ProjectsSection() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                      <h3 className="text-sm font-bold text-white" style={{ fontFamily: SANS }}>{p.title}</h3>
+                      <h3 className="text-sm font-bold text-foreground" style={{ fontFamily: SANS }}>{p.title}</h3>
                       <span className="text-[8px] px-1.5 py-0.5 rounded uppercase tracking-widest font-bold" style={{ color: p.color, background: `${p.color}12`, border: `1px solid ${p.color}30` }}>
                         {p.tag}
                       </span>
                     </div>
                     <p className="text-xs leading-relaxed mb-1.5" style={{ color: MUTED }}><span className="font-semibold" style={{ color: p.color }}>Why: </span>{p.why}</p>
                     <p className="text-xs leading-relaxed mb-2" style={{ color: MUTED }}>{p.what}</p>
-                    <div className="rounded-lg p-3 mt-2 text-[10px]" style={{ background: "oklch(0.08 0.02 260 / 50%)", border: "1px solid oklch(0.18 0.04 260 / 40%)" }}>
+                    <div className="rounded-lg p-3 mt-2 text-[10px]" style={{ background: "var(--surface-0)", border: "1px solid oklch(0.18 0.04 260 / 40%)" }}>
                       <span className="font-semibold" style={{ color: p.color }}>Lessons Learned: </span>
                       {p.learned}
                     </div>
@@ -1306,7 +1306,7 @@ function BeyondTechSection() {
   ];
 
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <Reveal>
         <SectionHeading
           prompt="> whoami --full"
@@ -1323,17 +1323,17 @@ function BeyondTechSection() {
               <motion.div
                 className="group rounded-xl p-4 h-full"
                 style={{
-                  background: "oklch(0.10 0.03 260 / 70%)",
+                  background: "var(--surface-2)",
                   border: "1px solid oklch(0.20 0.04 260 / 50%)",
                 }}
                 whileHover={{
                   border: `1px solid ${GREEN}25`,
-                  background: "oklch(0.12 0.04 260 / 80%)",
+                  background: "var(--surface-4)",
                   transition: { duration: 0.15 },
                 }}
               >
                 <div className="flex items-center gap-2.5 mb-2">
-                  <Icon className="h-3.5 w-3.5 transition-colors" style={{ color: `${GREEN}60` }} />
+                  <Icon className="h-3.5 w-3.5 transition-colors" style={{ color: `color-mix(in oklch, ${GREEN} 37%, transparent)` }} />
                   <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: DIM }}>
                     {item.label}
                   </span>
@@ -1351,7 +1351,7 @@ function BeyondTechSection() {
 // ── Section 8: Failures & Lessons ─────────────────────────────────────────────
 function FailuresSection() {
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <Reveal>
         <SectionHeading
           prompt="> cat /var/log/errors.log"
@@ -1368,27 +1368,27 @@ function FailuresSection() {
               <div
                 className="rounded-xl p-5"
                 style={{
-                  background: "oklch(0.10 0.03 260 / 80%)",
+                  background: "var(--surface-3)",
                   border: "1px solid oklch(0.22 0.04 260 / 50%)",
                   borderLeft: "3px solid oklch(0.7 0.22 320 / 50%)",
                 }}
               >
                 <div className="flex items-start gap-4">
-                  <div className="h-8 w-8 flex-shrink-0 flex items-center justify-center rounded-lg" style={{ background: "oklch(0.7 0.22 320 / 10%)", border: "1px solid oklch(0.7 0.22 320 / 25%)" }}>
-                    <Icon className="h-3.5 w-3.5" style={{ color: "oklch(0.7 0.22 320 / 80%)" }} />
+                  <div className="h-8 w-8 flex-shrink-0 flex items-center justify-center rounded-lg" style={{ background: "color-mix(in oklch, var(--token-purple) 10%, var(--card))", border: "1px solid oklch(0.7 0.22 320 / 25%)" }}>
+                    <Icon className="h-3.5 w-3.5" style={{ color: "color-mix(in oklch, var(--token-purple) 80%, transparent)" }} />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: "oklch(0.7 0.22 320 / 60%)", fontFamily: MONO }}>
+                      <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: "color-mix(in oklch, var(--token-purple) 60%, transparent)", fontFamily: MONO }}>
                         // incident #0{i+1}
                       </span>
-                      <h3 className="text-xs font-bold text-white">{f.title}</h3>
+                      <h3 className="text-xs font-bold text-foreground">{f.title}</h3>
                     </div>
                     <p className="text-xs leading-relaxed mb-3" style={{ color: MUTED }}>{f.body}</p>
-                    <div className="flex items-start gap-2 rounded-md px-3 py-2" style={{ background: "oklch(0.7 0.22 320 / 06%)", border: "1px solid oklch(0.7 0.22 320 / 18%)" }}>
-                      <Zap className="h-3 w-3 mt-0.5 flex-shrink-0" style={{ color: "oklch(0.7 0.22 320 / 70%)" }} />
+                    <div className="flex items-start gap-2 rounded-md px-3 py-2" style={{ background: "color-mix(in oklch, var(--token-purple) 6%, var(--card))", border: "1px solid oklch(0.7 0.22 320 / 18%)" }}>
+                      <Zap className="h-3 w-3 mt-0.5 flex-shrink-0" style={{ color: "color-mix(in oklch, var(--token-purple) 70%, transparent)" }} />
                       <p className="text-[10px] leading-snug" style={{ color: DIM }}>
-                        <span className="font-semibold" style={{ color: "oklch(0.7 0.22 320 / 80%)" }}>Key Takeaway: </span>
+                        <span className="font-semibold" style={{ color: "color-mix(in oklch, var(--token-purple) 80%, transparent)" }}>Key Takeaway: </span>
                         {f.takeaway}
                       </p>
                     </div>
@@ -1412,7 +1412,7 @@ function FutureSection() {
   ];
 
   return (
-    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "oklch(0.07 0.02 260 / 50%)", borderColor: "oklch(0.20 0.04 260 / 50%)" }}>
+    <div className="rounded-2xl p-6 sm:p-8 border" style={{ background: "var(--surface-0)", borderColor: "var(--border)" }}>
       <Reveal>
         <SectionHeading
           prompt="> cat ./future.plan"
@@ -1454,7 +1454,7 @@ function FutureSection() {
         <div className="mt-6">
           <TerminalBlock label="~/closing_thoughts.md" accent={GREEN}>
             <div className="space-y-3">
-              <p className="text-xs leading-relaxed text-white">
+              <p className="text-xs leading-relaxed text-foreground">
                 The target remains: understand trust, build mechanisms to defend it, and always check the core assumptions.
               </p>
               <div className="flex items-center gap-2 pt-2">
@@ -1554,14 +1554,14 @@ function StoryPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen" style={{ background: "oklch(0.08 0.02 260)", color: TEXT }}>
+    <div className="relative min-h-screen bg-background">
       <CustomCursor />
       <Navbar />
 
       {/* Ambient background glow */}
       <div
         className="pointer-events-none fixed inset-0 z-0"
-        style={{ background: "radial-gradient(ellipse 80% 40% at 50% -10%, oklch(0.14 0.05 280 / 35%) 0%, transparent 60%)" }}
+        style={{ background: "radial-gradient(ellipse 80% 40% at 50% -10%, var(--hero-overlay) 0%, transparent 60%)" }}
       />
 
       <div className="relative z-10">

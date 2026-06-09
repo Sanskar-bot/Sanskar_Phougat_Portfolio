@@ -30,24 +30,23 @@ export function TimelineStats({ stats }: TimelineStatsProps) {
           transition={{ delay: i * 0.08, duration: 0.35 }}
           className="relative flex flex-col items-center justify-center rounded-md py-2 px-1 overflow-hidden"
           style={{
-            background: "oklch(0.12 0.04 260 / 80%)",
-            border: "1px solid oklch(0.82 0.18 170 / 20%)",
+            background: "var(--card)",
+            border: "1px solid var(--border)",
           }}
         >
           {/* Subtle glow top edge */}
           <div
             className="pointer-events-none absolute top-0 left-0 right-0 h-px"
-            style={{ background: "linear-gradient(90deg, transparent, oklch(0.82 0.18 170 / 50%), transparent)" }}
+            style={{ background: "linear-gradient(90deg, transparent, var(--neon-cyan), transparent)", opacity: 0.5 }}
           />
           <span
-            className="text-lg font-bold leading-none tracking-tight"
-            style={{ color: "oklch(0.85 0.16 195)", fontFamily: "'JetBrains Mono', monospace" }}
+            className="text-lg font-bold leading-none tracking-tight text-primary"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
             {item.value}
           </span>
           <span
-            className="mt-0.5 text-[9px] font-semibold tracking-widest"
-            style={{ color: "oklch(0.55 0.03 220)" }}
+            className="mt-0.5 text-[9px] font-semibold tracking-widest text-muted-foreground"
           >
             {item.label}
           </span>

@@ -18,17 +18,17 @@ const STATS_URL =
   "https://raw.githubusercontent.com/Sanskar-bot/Daily-Learnings/main/portfolio-data/stats.json";
 
 // ── Design Tokens ─────────────────────────────────────────────────────────────
-const CYAN   = "oklch(0.82 0.18 170)";
+const CYAN   = "var(--neon-cyan)";
 const GREEN  = "oklch(0.75 0.2 145)";
 const PURPLE = "oklch(0.7 0.22 320)";
-const DIM    = "oklch(0.50 0.03 220)";
-const FAINT  = "oklch(0.35 0.02 220)";
+const DIM    = "var(--timeline-date-color)";
+const FAINT  = "var(--token-faint)";
 const MONO   = "'JetBrains Mono', monospace";
 const SANS   = "'Space Grotesk', sans-serif";
 
 const DIFFICULTY_COLORS = {
   Beginner:     { text: "oklch(0.75 0.2 145)",  bg: "oklch(0.75 0.2 145 / 12%)",  border: "oklch(0.75 0.2 145 / 35%)"  },
-  Intermediate: { text: "oklch(0.82 0.18 170)", bg: "oklch(0.82 0.18 170 / 12%)", border: "oklch(0.82 0.18 170 / 35%)" },
+  Intermediate: { text: "var(--neon-cyan)", bg: "oklch(0.82 0.18 170 / 12%)", border: "oklch(0.82 0.18 170 / 35%)" },
   Advanced:     { text: "oklch(0.7 0.22 320)",  bg: "oklch(0.7 0.22 320 / 12%)",  border: "oklch(0.7 0.22 320 / 35%)"  },
 };
 
@@ -57,7 +57,7 @@ const getDayStyle = (entry: TimelineEntry | undefined) => {
 
   if (entry.difficulty === "Advanced") {
     return {
-      background: "oklch(0.7 0.22 320 / 30%)",
+      background: "color-mix(in oklch, var(--token-purple) 30%, transparent)",
       border: "1px solid oklch(0.7 0.22 320 / 80%)",
       color: "oklch(0.7 0.22 320)",
       boxShadow: "0 0 10px oklch(0.7 0.22 320 / 40%)",
@@ -67,20 +67,20 @@ const getDayStyle = (entry: TimelineEntry | undefined) => {
   // Cyan activity levels based on word count
   if (entry.wordCount > 800) {
     return {
-      background: "oklch(0.82 0.18 170 / 40%)",
+      background: "color-mix(in oklch, var(--neon-cyan) 40%, transparent)",
       border: "1px solid oklch(0.82 0.18 170 / 90%)",
-      color: "oklch(0.82 0.18 170)",
+      color: "var(--neon-cyan)",
       boxShadow: "0 0 12px oklch(0.82 0.18 170 / 50%)",
     };
   } else if (entry.wordCount > 300) {
     return {
-      background: "oklch(0.82 0.18 170 / 25%)",
+      background: "color-mix(in oklch, var(--neon-cyan) 25%, transparent)",
       border: "1px solid oklch(0.82 0.18 170 / 60%)",
-      color: "oklch(0.82 0.18 170)",
+      color: "var(--neon-cyan)",
     };
   } else {
     return {
-      background: "oklch(0.82 0.18 170 / 10%)",
+      background: "color-mix(in oklch, var(--neon-cyan) 10%, transparent)",
       border: "1px solid oklch(0.82 0.18 170 / 30%)",
       color: "oklch(0.82 0.18 170 / 80%)",
     };
@@ -93,19 +93,19 @@ function SkeletonCard() {
     <div className="flex gap-4">
       <div className="flex flex-col items-center flex-shrink-0 w-5 pt-2">
         <div className="h-3 w-3 rounded-full animate-pulse" style={{ background: "oklch(0.22 0.04 260)" }} />
-        <div className="flex-1 w-px mt-2 animate-pulse" style={{ background: "oklch(0.16 0.03 260)", minHeight: 80 }} />
+        <div className="flex-1 w-px mt-2 animate-pulse" style={{ background: "var(--border)", minHeight: 80 }} />
       </div>
-      <div className="flex-1 mb-4 rounded-xl p-4 animate-pulse" style={{ background: "oklch(0.11 0.03 260)", border: "1px solid oklch(0.18 0.04 260 / 50%)" }}>
+      <div className="flex-1 mb-4 rounded-xl p-4 animate-pulse" style={{ background: "var(--card)", border: "1px solid oklch(0.18 0.04 260 / 50%)" }}>
         <div className="flex justify-between mb-3">
-          <div className="h-2.5 w-24 rounded" style={{ background: "oklch(0.18 0.03 260)" }} />
-          <div className="h-2.5 w-16 rounded" style={{ background: "oklch(0.18 0.03 260)" }} />
+          <div className="h-2.5 w-24 rounded" style={{ background: "var(--muted)" }} />
+          <div className="h-2.5 w-16 rounded" style={{ background: "var(--muted)" }} />
         </div>
-        <div className="h-4 w-3/4 rounded mb-2" style={{ background: "oklch(0.18 0.03 260)" }} />
-        <div className="h-3 w-full rounded mb-1" style={{ background: "oklch(0.15 0.03 260)" }} />
-        <div className="h-3 w-2/3 rounded mb-3" style={{ background: "oklch(0.15 0.03 260)" }} />
+        <div className="h-4 w-3/4 rounded mb-2" style={{ background: "var(--muted)" }} />
+        <div className="h-3 w-full rounded mb-1" style={{ background: "var(--muted)" }} />
+        <div className="h-3 w-2/3 rounded mb-3" style={{ background: "var(--muted)" }} />
         <div className="flex gap-2">
           {[50, 65, 55, 70].map((w, i) => (
-            <div key={i} className="h-2.5 rounded" style={{ width: w, background: "oklch(0.16 0.03 260)" }} />
+            <div key={i} className="h-2.5 rounded" style={{ width: w, background: "var(--border)" }} />
           ))}
         </div>
       </div>
@@ -145,7 +145,7 @@ function EntryCard({
         {!isLast && (
           <div
             className="flex-1 w-px mt-2"
-            style={{ background: "linear-gradient(to bottom, oklch(0.82 0.18 170 / 20%), transparent)", minHeight: 32 }}
+            style={{ background: "var(--timeline-connector)", minHeight: 32 }}
           />
         )}
       </div>
@@ -155,7 +155,7 @@ function EntryCard({
         onClick={onClick}
         className="group relative flex-1 mb-4 text-left rounded-xl overflow-hidden focus:outline-none"
         style={{
-          background: isSelected ? "oklch(0.13 0.04 260 / 90%)" : "oklch(0.10 0.03 260 / 85%)",
+          background: isSelected ? "var(--timeline-card-selected)" : "var(--card)",
           border: isSelected ? `1.5px solid ${dc.text}` : "1px solid oklch(0.22 0.04 260 / 60%)",
           boxShadow: isSelected ? `0 0 24px ${dc.text}18, 0 4px 32px oklch(0.04 0.02 260 / 60%)` : "none",
           backdropFilter: "blur(8px)",
@@ -175,7 +175,7 @@ function EntryCard({
           <div className="flex items-center justify-between mb-2">
             <span
               className="text-[10px] font-semibold tracking-widest"
-              style={{ color: "oklch(0.50 0.03 220)", fontFamily: MONO }}
+              style={{ color: "var(--timeline-date-color)", fontFamily: MONO }}
             >
               {formatDate(entry.date)}
             </span>
@@ -188,12 +188,12 @@ function EntryCard({
           </div>
 
           {/* Title */}
-          <p className="text-sm font-semibold leading-snug mb-2 line-clamp-2" style={{ color: "oklch(0.92 0.01 180)" }}>
+          <p className="text-sm font-semibold leading-snug mb-2 line-clamp-2" style={{ color: "var(--foreground)" }}>
             {entry.title}
           </p>
 
           {/* Summary */}
-          <p className="text-xs leading-relaxed mb-3 line-clamp-2" style={{ color: "oklch(0.58 0.02 210)" }}>
+          <p className="text-xs leading-relaxed mb-3 line-clamp-2" style={{ color: "var(--muted-foreground)" }}>
             {entry.summary}
           </p>
 
@@ -204,18 +204,18 @@ function EntryCard({
                 <span
                   key={t}
                   className="text-[8px] rounded px-1.5 py-0.5 truncate"
-                  style={{ color: "oklch(0.82 0.18 170 / 75%)", background: "oklch(0.82 0.18 170 / 07%)", border: "1px solid oklch(0.82 0.18 170 / 18%)" }}
+                  style={{ color: "var(--token-cyan)", background: "color-mix(in oklch, var(--neon-cyan) 7%, transparent)", border: "1px solid color-mix(in oklch, var(--neon-cyan) 18%, transparent)" }}
                 >
                   #{t}
                 </span>
               ))}
               {entry.tags.length > 4 && (
-                <span className="text-[8px] rounded px-1.5 py-0.5" style={{ color: "oklch(0.45 0.02 220)", background: "oklch(0.14 0.03 260 / 60%)", border: "1px solid oklch(0.22 0.04 260 / 40%)" }}>
+                <span className="text-[8px] rounded px-1.5 py-0.5" style={{ color: "var(--muted-foreground)", background: "var(--muted)", border: "1px solid oklch(0.22 0.04 260 / 40%)" }}>
                   +{entry.tags.length - 4}
                 </span>
               )}
             </div>
-            <span className="text-[9px] flex-shrink-0" style={{ color: "oklch(0.40 0.02 220)", fontFamily: MONO }}>
+            <span className="text-[9px] flex-shrink-0" style={{ color: "var(--token-dim)", fontFamily: MONO }}>
               {entry.wordCount.toLocaleString()} w
             </span>
           </div>
@@ -231,10 +231,10 @@ function DetailPanel({ entry }: { entry: TimelineEntry | null }) {
     return (
       <div 
         className="rounded-xl p-6 text-center border border-dashed border-muted/30"
-        style={{ background: "oklch(0.10 0.03 260 / 60%)" }}
+        style={{ background: "var(--surface-2)" }}
       >
         <BookOpen className="h-5 w-5 mx-auto mb-2 text-muted-foreground opacity-60" />
-        <p className="text-xs font-semibold mb-1" style={{ color: "oklch(0.60 0.03 220)" }}>Select a Date</p>
+        <p className="text-xs font-semibold mb-1" style={{ color: "var(--muted-foreground)" }}>Select a Date</p>
         <p className="text-[10px] text-muted-foreground">Click any highlighted calendar date or list card to inspect detail logs.</p>
       </div>
     );
@@ -249,7 +249,7 @@ function DetailPanel({ entry }: { entry: TimelineEntry | null }) {
       animate={{ opacity: 1, scale: 1 }}
       className="rounded-xl p-5 border"
       style={{
-        background: "oklch(0.11 0.03 260 / 80%)",
+        background: "var(--surface-1)",
         borderColor: dc.border,
         boxShadow: `0 0 20px ${dc.text}10`,
       }}
@@ -257,7 +257,7 @@ function DetailPanel({ entry }: { entry: TimelineEntry | null }) {
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center gap-2">
           <Calendar className="h-3.5 w-3.5" style={{ color: dc.text }} />
-          <span className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: "oklch(0.50 0.03 220)", fontFamily: MONO }}>
+          <span className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--timeline-date-color)", fontFamily: MONO }}>
             {formatDate(entry.date)}
           </span>
         </div>
@@ -269,7 +269,7 @@ function DetailPanel({ entry }: { entry: TimelineEntry | null }) {
         </span>
       </div>
 
-      <h3 className="text-sm font-bold text-white mb-3 leading-snug" style={{ fontFamily: SANS }}>
+      <h3 className="text-sm font-bold text-foreground mb-3 leading-snug" style={{ fontFamily: SANS }}>
         {entry.title}
       </h3>
 
@@ -283,16 +283,16 @@ function DetailPanel({ entry }: { entry: TimelineEntry | null }) {
           </p>
         </div>
 
-        <div className="h-px style-border" style={{ background: "oklch(0.18 0.04 260 / 50%)" }} />
+        <div className="h-px style-border" style={{ background: "var(--surface-divider)" }} />
 
         <div className="grid grid-cols-2 gap-3 text-[10px]" style={{ fontFamily: MONO }}>
           <div>
             <span className="text-muted-foreground block text-[9px] uppercase tracking-wider mb-1">// Word Count</span>
-            <span className="text-white font-semibold">{entry.wordCount} words</span>
+            <span className="text-foreground font-semibold">{entry.wordCount} words</span>
           </div>
           <div>
             <span className="text-muted-foreground block text-[9px] uppercase tracking-wider mb-1">// Source</span>
-            <span className="text-white truncate block">{entry.sourceFile}</span>
+            <span className="text-foreground truncate block">{entry.sourceFile}</span>
           </div>
         </div>
 
@@ -306,8 +306,8 @@ function DetailPanel({ entry }: { entry: TimelineEntry | null }) {
                 key={t} 
                 className="px-2 py-0.5 rounded text-[9px]" 
                 style={{ 
-                  color: "oklch(0.82 0.18 170 / 85%)", 
-                  background: "oklch(0.82 0.18 170 / 08%)", 
+                  color: "var(--token-cyan)", 
+                  background: "color-mix(in oklch, var(--neon-cyan) 8%, transparent)", 
                   border: "1px solid oklch(0.82 0.18 170 / 22%)" 
                 }}
               >
@@ -323,11 +323,11 @@ function DetailPanel({ entry }: { entry: TimelineEntry | null }) {
           rel="noopener noreferrer"
           className="flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-[10px] font-bold uppercase tracking-widest"
           style={{
-            background: "oklch(0.82 0.18 170 / 10%)",
+            background: "color-mix(in oklch, var(--neon-cyan) 10%, transparent)",
             border: `1px solid oklch(0.82 0.18 170 / 38%)`,
-            color: "oklch(0.82 0.18 170)",
+            color: "var(--neon-cyan)",
           }}
-          whileHover={{ background: "oklch(0.82 0.18 170 / 18%)" }}
+          whileHover={{ background: "color-mix(in oklch, var(--neon-cyan) 18%, transparent)" }}
           whileTap={{ scale: 0.98 }}
         >
           View GitHub Commit <ExternalLink className="h-3 w-3" />
@@ -439,13 +439,13 @@ function LearningCalendarSidebar({
   return (
     <div ref={containerRef} className="relative space-y-6">
       {/* View Switcher Toggle */}
-      <div className="flex justify-between items-center rounded-xl p-1 border border-muted/30" style={{ background: "oklch(0.10 0.03 260 / 60%)" }}>
+      <div className="flex justify-between items-center rounded-xl p-1 border border-muted/30" style={{ background: "var(--surface-2)" }}>
         <button
           onClick={() => setViewMode("calendar")}
           className="flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all"
           style={{
-            background: viewMode === "calendar" ? "oklch(0.82 0.18 170)" : "transparent",
-            color: viewMode === "calendar" ? "black" : "oklch(0.65 0.03 220)",
+            background: viewMode === "calendar" ? "var(--primary)" : "transparent",
+            color: viewMode === "calendar" ? "var(--primary-foreground)" : "var(--muted-foreground)",
           }}
         >
           Calendar View
@@ -454,8 +454,8 @@ function LearningCalendarSidebar({
           onClick={() => setViewMode("heatmap")}
           className="flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all"
           style={{
-            background: viewMode === "heatmap" ? "oklch(0.82 0.18 170)" : "transparent",
-            color: viewMode === "heatmap" ? "black" : "oklch(0.65 0.03 220)",
+            background: viewMode === "heatmap" ? "var(--primary)" : "transparent",
+            color: viewMode === "heatmap" ? "var(--primary-foreground)" : "var(--muted-foreground)",
           }}
         >
           Heatmap View
@@ -464,16 +464,16 @@ function LearningCalendarSidebar({
 
       {/* Calendar Panel */}
       {viewMode === "calendar" ? (
-        <div className="rounded-xl p-4 border border-muted/30" style={{ background: "oklch(0.10 0.03 260 / 80%)" }}>
+        <div className="rounded-xl p-4 border border-muted/30" style={{ background: "var(--surface-3)" }}>
           {/* Month Navigator */}
           <div className="flex justify-between items-center mb-4">
-            <button onClick={handlePrevMonth} className="p-1 hover:text-white text-muted-foreground transition-colors font-bold text-sm">
+            <button onClick={handlePrevMonth} className="p-1 hover:text-foreground text-muted-foreground transition-colors font-bold text-sm">
               &larr;
             </button>
-            <span className="text-xs font-semibold text-white uppercase tracking-wider">
+            <span className="text-xs font-semibold text-foreground uppercase tracking-wider">
               {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
             </span>
-            <button onClick={handleNextMonth} className="p-1 hover:text-white text-muted-foreground transition-colors font-bold text-sm">
+            <button onClick={handleNextMonth} className="p-1 hover:text-foreground text-muted-foreground transition-colors font-bold text-sm">
               &rarr;
             </button>
           </div>
@@ -503,8 +503,8 @@ function LearningCalendarSidebar({
                     disabled={!entry}
                     className="w-8 h-8 rounded-md text-[10px] flex items-center justify-center font-medium transition-all"
                     style={{
-                      background: "oklch(0.12 0.03 260)",
-                      color: entry ? "white" : "oklch(0.35 0.02 220)",
+                      background: "var(--card)",
+                      color: entry ? "white" : "var(--token-faint)",
                       border: "1px solid oklch(0.18 0.03 260)",
                       ...dayStyle,
                       ...(isSel ? { border: `1.5px solid oklch(0.82 0.18 170)`, boxShadow: `0 0 10px oklch(0.82 0.18 170)` } : {}),
@@ -520,7 +520,7 @@ function LearningCalendarSidebar({
         </div>
       ) : (
         /* Heatmap Panel */
-        <div className="rounded-xl p-4 border border-muted/30 overflow-x-auto scrollbar-hide" style={{ background: "oklch(0.10 0.03 260 / 80%)" }}>
+        <div className="rounded-xl p-4 border border-muted/30 overflow-x-auto scrollbar-hide" style={{ background: "var(--surface-3)" }}>
           <div className="flex flex-col">
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-3">// Heatmap Log (Last 18 Weeks)</span>
             
@@ -550,7 +550,7 @@ function LearningCalendarSidebar({
                           disabled={!entry}
                           className="w-2.5 h-2.5 rounded-sm"
                           style={{
-                            background: "oklch(0.12 0.03 260)",
+                            background: "var(--card)",
                             border: "1px solid oklch(0.15 0.03 260)",
                             ...dayStyle,
                             ...(isSel ? { border: `1px solid oklch(0.82 0.18 170)`, boxShadow: `0 0 4px oklch(0.82 0.18 170)` } : {}),
@@ -566,11 +566,11 @@ function LearningCalendarSidebar({
 
             <div className="flex justify-end items-center gap-1.5 mt-3 text-[9px] text-muted-foreground">
               <span>Less</span>
-              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "oklch(0.12 0.03 260)" }} />
-              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "oklch(0.82 0.18 170 / 10%)", border: "1px solid oklch(0.82 0.18 170 / 30%)" }} />
-              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "oklch(0.82 0.18 170 / 25%)", border: "1px solid oklch(0.82 0.18 170 / 60%)" }} />
-              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "oklch(0.82 0.18 170 / 40%)", border: "1px solid oklch(0.82 0.18 170 / 90%)" }} />
-              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "oklch(0.7 0.22 320 / 30%)", border: "1px solid oklch(0.7 0.22 320 / 80%)" }} />
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "var(--card)" }} />
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "color-mix(in oklch, var(--neon-cyan) 10%, transparent)", border: "1px solid oklch(0.82 0.18 170 / 30%)" }} />
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "color-mix(in oklch, var(--neon-cyan) 25%, transparent)", border: "1px solid oklch(0.82 0.18 170 / 60%)" }} />
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "color-mix(in oklch, var(--neon-cyan) 40%, transparent)", border: "1px solid oklch(0.82 0.18 170 / 90%)" }} />
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "color-mix(in oklch, var(--token-purple) 30%, transparent)", border: "1px solid oklch(0.7 0.22 320 / 80%)" }} />
               <span>More</span>
             </div>
           </div>
@@ -588,20 +588,20 @@ function LearningCalendarSidebar({
             style={{
               top: hoveredDay.y - 130,
               left: Math.max(10, Math.min(130, hoveredDay.x - 104)),
-              background: "oklch(0.09 0.03 260 / 95%)",
+              background: "var(--surface-overlay)",
               borderColor: "oklch(0.25 0.04 260 / 80%)",
               boxShadow: "0 8px 30px rgba(0,0,0,0.9)",
               backdropFilter: "blur(6px)",
             }}
           >
-            <div className="font-semibold text-white truncate mb-1">{hoveredDay.entry.title}</div>
+            <div className="font-semibold text-foreground truncate mb-1">{hoveredDay.entry.title}</div>
             <div style={{ color: DIM }} className="mb-1">{formatDate(hoveredDay.entry.date)}</div>
             <div className="flex gap-2 mb-1.5">
               <span className="font-semibold" style={{ color: hoveredDay.entry.difficulty === "Advanced" ? PURPLE : CYAN }}>
                 {hoveredDay.entry.difficulty}
               </span>
               <span style={{ color: FAINT }}>•</span>
-              <span className="text-white">{hoveredDay.entry.wordCount} words</span>
+              <span className="text-foreground">{hoveredDay.entry.wordCount} words</span>
             </div>
             <div className="flex flex-wrap gap-1">
               {hoveredDay.entry.tags.slice(0, 3).map((t) => (
@@ -613,24 +613,24 @@ function LearningCalendarSidebar({
       </AnimatePresence>
 
       {/* Monthly Learning Statistics */}
-      <div className="rounded-xl p-4 border border-muted/30 space-y-3" style={{ background: "oklch(0.10 0.03 260 / 60%)", fontFamily: MONO }}>
+      <div className="rounded-xl p-4 border border-muted/30 space-y-3" style={{ background: "var(--surface-2)", fontFamily: MONO }}>
         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block mb-1">// Streak & Logs Dashboard</span>
         <div className="grid grid-cols-2 gap-2 text-[10px]">
           <div className="p-2 rounded bg-muted/05 border border-muted/15">
             <span style={{ color: DIM }} className="block">Current Streak</span>
-            <span className="text-sm font-bold text-white mt-1 block">{statsCalculations.currentStreak} Days</span>
+            <span className="text-sm font-bold text-foreground mt-1 block">{statsCalculations.currentStreak} Days</span>
           </div>
           <div className="p-2 rounded bg-muted/05 border border-muted/15">
             <span style={{ color: DIM }} className="block">Longest Streak</span>
-            <span className="text-sm font-bold text-white mt-1 block">{statsCalculations.longestStreak} Days</span>
+            <span className="text-sm font-bold text-foreground mt-1 block">{statsCalculations.longestStreak} Days</span>
           </div>
           <div className="p-2 rounded bg-muted/05 border border-muted/15">
             <span style={{ color: DIM }} className="block">Month Logs</span>
-            <span className="text-sm font-bold text-white mt-1 block">{statsCalculations.entriesThisMonth} Days</span>
+            <span className="text-sm font-bold text-foreground mt-1 block">{statsCalculations.entriesThisMonth} Days</span>
           </div>
           <div className="p-2 rounded bg-muted/05 border border-muted/15">
             <span style={{ color: DIM }} className="block">Month Words</span>
-            <span className="text-sm font-bold text-white mt-1 block">{statsCalculations.wordsThisMonth.toLocaleString()}</span>
+            <span className="text-sm font-bold text-foreground mt-1 block">{statsCalculations.wordsThisMonth.toLocaleString()}</span>
           </div>
         </div>
         <div className="p-2.5 rounded bg-muted/05 border border-muted/15 text-[10px] flex justify-between items-center">
@@ -662,11 +662,11 @@ function StatsBar({ stats }: { stats: TimelineStats }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.08, duration: 0.4 }}
           className="relative flex flex-col items-center justify-center rounded-xl py-4 px-3 overflow-hidden"
-          style={{ background: "oklch(0.11 0.04 260 / 80%)", border: "1px solid oklch(0.82 0.18 170 / 18%)", backdropFilter: "blur(12px)" }}
+          style={{ background: "var(--surface-1)", border: "1px solid color-mix(in oklch, var(--neon-cyan) 18%, transparent)", backdropFilter: "blur(12px)" }}
         >
           <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, oklch(0.82 0.18 170 / 45%), transparent)" }} />
-          <Icon className="h-4 w-4 mb-1.5" style={{ color: "oklch(0.82 0.18 170 / 55%)" }} />
-          <span className="text-2xl font-bold leading-none" style={{ color: "oklch(0.85 0.16 195)", fontFamily: MONO }}>
+          <Icon className="h-4 w-4 mb-1.5" style={{ color: "color-mix(in oklch, var(--neon-cyan) 55%, transparent)" }} />
+          <span className="text-2xl font-bold leading-none" style={{ color: "var(--primary)", fontFamily: MONO }}>
             {value}
           </span>
           <span className="mt-1 text-[9px] font-semibold tracking-widest uppercase text-center" style={{ color: "oklch(0.48 0.02 220)" }}>
@@ -685,8 +685,8 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
       <div className="h-14 w-14 flex items-center justify-center rounded-full" style={{ background: "oklch(0.7 0.22 320 / 12%)", border: "1px solid oklch(0.7 0.22 320 / 30%)" }}>
         <AlertTriangle className="h-6 w-6" style={{ color: "oklch(0.7 0.22 320)" }} />
       </div>
-      <p className="text-sm font-semibold" style={{ color: "oklch(0.75 0.02 200)" }}>Timeline temporarily unavailable</p>
-      <motion.button onClick={onRetry} className="flex items-center gap-2 rounded-lg px-5 py-2.5 text-xs font-bold uppercase tracking-widest" style={{ background: "oklch(0.82 0.18 170 / 10%)", border: "1px solid oklch(0.82 0.18 170 / 30%)", color: "oklch(0.82 0.18 170)" }} whileHover={{ background: "oklch(0.82 0.18 170 / 18%)" }} whileTap={{ scale: 0.96 }}>
+      <p className="text-sm font-semibold" style={{ color: "var(--muted-foreground)" }}>Timeline temporarily unavailable</p>
+      <motion.button onClick={onRetry} className="flex items-center gap-2 rounded-lg px-5 py-2.5 text-xs font-bold uppercase tracking-widest" style={{ background: "color-mix(in oklch, var(--neon-cyan) 10%, transparent)", border: "1px solid oklch(0.82 0.18 170 / 30%)", color: "var(--neon-cyan)" }} whileHover={{ background: "color-mix(in oklch, var(--neon-cyan) 18%, transparent)" }} whileTap={{ scale: 0.96 }}>
         <RefreshCw className="h-3.5 w-3.5" />Retry
       </motion.button>
     </div>
@@ -831,17 +831,17 @@ function TimelinePage() {
   const isLoading = el || sl;
 
   return (
-    <div className="relative min-h-screen grid-bg" style={{ background: "oklch(0.08 0.02 260)" }}>
+    <div className="relative min-h-screen grid-bg bg-background">
       <CustomCursor />
       <Navbar />
 
       {/* Background glow */}
-      <div className="pointer-events-none fixed inset-0 z-0" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 0%, oklch(0.15 0.05 280 / 40%) 0%, transparent 70%)" }} />
+      <div className="pointer-events-none fixed inset-0 z-0" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 0%, var(--hero-overlay) 0%, transparent 70%)" }} />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 pt-28 pb-20">
         {/* Back Link */}
         <motion.div initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} className="mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest transition-colors hover:text-primary" style={{ color: "oklch(0.50 0.03 220)" }}>
+          <Link to="/" className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest transition-colors hover:text-primary" style={{ color: "var(--timeline-date-color)" }}>
             <ArrowLeft className="h-3.5 w-3.5" />
             Back to Portfolio
           </Link>
@@ -850,8 +850,8 @@ function TimelinePage() {
         {/* Page Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
           <div className="flex items-center gap-3 mb-3">
-            <div className="h-px w-8" style={{ background: "oklch(0.82 0.18 170 / 50%)" }} />
-            <span className="text-[9px] font-bold tracking-[0.35em] uppercase" style={{ color: "oklch(0.82 0.18 170 / 60%)", fontFamily: MONO }}>
+            <div className="h-px w-8" style={{ background: "color-mix(in oklch, var(--neon-cyan) 50%, transparent)" }} />
+            <span className="text-[9px] font-bold tracking-[0.35em] uppercase" style={{ color: "color-mix(in oklch, var(--neon-cyan) 60%, transparent)", fontFamily: MONO }}>
               ~/daily-learnings
             </span>
             <span className="flex items-center gap-1">
@@ -862,7 +862,7 @@ function TimelinePage() {
           <h1 className="text-4xl sm:text-5xl font-bold leading-tight" style={{ fontFamily: SANS }}>
             Learning <span className="text-gradient">Timeline</span>
           </h1>
-          <p className="mt-3 text-sm max-w-xl" style={{ color: "oklch(0.60 0.03 220)" }}>
+          <p className="mt-3 text-sm max-w-xl" style={{ color: "var(--muted-foreground)" }}>
             A live archive of every learning session — cybersecurity, cryptography, tooling, and beyond.
           </p>
         </motion.div>
@@ -872,7 +872,7 @@ function TimelinePage() {
         {isLoading && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="rounded-xl h-24 animate-pulse" style={{ background: "oklch(0.12 0.04 260)" }} />
+              <div key={i} className="rounded-xl h-24 animate-pulse" style={{ background: "var(--surface-hover)" }} />
             ))}
           </div>
         )}
@@ -880,7 +880,7 @@ function TimelinePage() {
         {/* Search & Filters */}
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex flex-col sm:flex-row gap-3 mb-8">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "oklch(0.82 0.18 170 / 50%)" }} />
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "color-mix(in oklch, var(--neon-cyan) 50%, transparent)" }} />
             <input
               ref={searchRef}
               id="timeline-page-search"
@@ -889,13 +889,13 @@ function TimelinePage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded-xl py-3 pl-10 pr-10 text-sm outline-none placeholder:text-muted-foreground transition-all"
-              style={{ background: "oklch(0.11 0.03 260 / 90%)", border: "1px solid oklch(0.25 0.04 260 / 60%)", color: "oklch(0.92 0.01 180)", fontFamily: MONO }}
+              style={{ background: "var(--card)", border: "1px solid var(--surface-sidebar-border)", color: "var(--foreground)", fontFamily: MONO }}
               onFocus={(e) => { e.currentTarget.style.border = `1px solid ${CYAN}55`; e.currentTarget.style.boxShadow = `0 0 16px ${CYAN}15`; }}
-              onBlur={(e) => { e.currentTarget.style.border = "1px solid oklch(0.25 0.04 260 / 60%)"; e.currentTarget.style.boxShadow = "none"; }}
+              onBlur={(e) => { e.currentTarget.style.border = "1px solid var(--surface-sidebar-border)"; e.currentTarget.style.boxShadow = "none"; }}
             />
             {search && (
               <button onClick={() => setSearch("")} className="absolute right-3.5 top-1/2 -translate-y-1/2 opacity-60 hover:opacity-100 transition-opacity">
-                <X className="h-4 w-4" style={{ color: "oklch(0.82 0.18 170)" }} />
+                <X className="h-4 w-4" style={{ color: "var(--neon-cyan)" }} />
               </button>
             )}
           </div>
@@ -904,16 +904,16 @@ function TimelinePage() {
             onClick={() => setFilterOpen((v) => !v)}
             className="flex items-center gap-2 rounded-xl px-4 py-3 text-xs font-semibold uppercase tracking-widest flex-shrink-0 transition-all"
             style={{
-              background: filterOpen ? "oklch(0.82 0.18 170 / 15%)" : "oklch(0.11 0.03 260 / 90%)",
-              border: filterOpen ? "1px solid oklch(0.82 0.18 170 / 50%)" : "1px solid oklch(0.25 0.04 260 / 60%)",
-              color: filterOpen ? "oklch(0.82 0.18 170)" : "oklch(0.60 0.03 220)",
+              background: filterOpen ? "oklch(0.82 0.18 170 / 15%)" : "var(--card)",
+              border: filterOpen ? "1px solid oklch(0.82 0.18 170 / 50%)" : "1px solid var(--surface-sidebar-border)",
+              color: filterOpen ? "var(--neon-cyan)" : "var(--muted-foreground)",
             }}
             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
           >
             <Filter className="h-3.5 w-3.5" />
             Filters
             {(diffFilter !== "All" || tagFilter !== "All") && (
-              <span className="inline-flex h-4 w-4 items-center justify-center rounded-full text-[8px] font-bold" style={{ background: "oklch(0.82 0.18 170)", color: "oklch(0.1 0.02 260)" }}>
+              <span className="inline-flex h-4 w-4 items-center justify-center rounded-full text-[8px] font-bold" style={{ background: "var(--neon-cyan)", color: "var(--primary-foreground)" }}>
                 {(diffFilter !== "All" ? 1 : 0) + (tagFilter !== "All" ? 1 : 0)}
               </span>
             )}
@@ -931,9 +931,9 @@ function TimelinePage() {
               transition={{ duration: 0.25 }}
               className="overflow-hidden mb-6"
             >
-              <div className="rounded-xl p-4 space-y-4" style={{ background: "oklch(0.10 0.03 260 / 90%)", border: "1px solid oklch(0.22 0.04 260 / 60%)" }}>
+              <div className="rounded-xl p-4 space-y-4" style={{ background: "var(--card)", border: "1px solid oklch(0.22 0.04 260 / 60%)" }}>
                 <div>
-                  <p className="text-[9px] font-bold tracking-widest uppercase mb-2" style={{ color: "oklch(0.45 0.02 220)" }}>Difficulty</p>
+                  <p className="text-[9px] font-bold tracking-widest uppercase mb-2" style={{ color: "var(--muted-foreground)" }}>Difficulty</p>
                   <div className="flex flex-wrap gap-2">
                     {["All", "Beginner", "Intermediate", "Advanced"].map((d) => {
                       const dc = d !== "All" ? DIFFICULTY_COLORS[d as keyof typeof DIFFICULTY_COLORS] : null;
@@ -943,9 +943,9 @@ function TimelinePage() {
                           onClick={() => setDiffFilter(d)}
                           className="rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all"
                           style={{
-                            background: diffFilter === d ? (dc ? dc.bg : "oklch(0.82 0.18 170 / 18%)") : "oklch(0.14 0.03 260)",
-                            border: diffFilter === d ? `1px solid ${dc ? dc.border : "oklch(0.82 0.18 170 / 50%)"}` : "1px solid oklch(0.22 0.04 260 / 50%)",
-                            color: diffFilter === d ? (dc ? dc.text : "oklch(0.82 0.18 170)") : "oklch(0.50 0.03 220)",
+                            background: diffFilter === d ? (dc ? dc.bg : "color-mix(in oklch, var(--neon-cyan) 18%, transparent)") : "var(--muted)",
+                            border: diffFilter === d ? `1px solid ${dc ? dc.border : "color-mix(in oklch, var(--neon-cyan) 50%, transparent)"}` : "1px solid oklch(0.22 0.04 260 / 50%)",
+                            color: diffFilter === d ? (dc ? dc.text : "var(--neon-cyan)") : "var(--timeline-date-color)",
                           }}
                         >
                           {d}
@@ -956,7 +956,7 @@ function TimelinePage() {
                 </div>
 
                 <div>
-                  <p className="text-[9px] font-bold tracking-widest uppercase mb-2" style={{ color: "oklch(0.45 0.02 220)" }}>Technology / Tag</p>
+                  <p className="text-[9px] font-bold tracking-widest uppercase mb-2" style={{ color: "var(--muted-foreground)" }}>Technology / Tag</p>
                   <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto" style={{ scrollbarWidth: "none" } as React.CSSProperties}>
                     {["All", ...allTags].map((t) => (
                       <button
@@ -964,9 +964,9 @@ function TimelinePage() {
                         onClick={() => setTagFilter(t)}
                         className="rounded px-2 py-1 text-[9px] font-medium transition-all"
                         style={{
-                          background: tagFilter === t ? "oklch(0.82 0.18 170 / 14%)" : "oklch(0.14 0.03 260)",
+                          background: tagFilter === t ? "color-mix(in oklch, var(--primary) 14%, transparent)" : "var(--muted)",
                           border: tagFilter === t ? "1px solid oklch(0.82 0.18 170 / 45%)" : "1px solid oklch(0.20 0.04 260 / 50%)",
-                          color: tagFilter === t ? "oklch(0.82 0.18 170)" : "oklch(0.48 0.03 220)",
+                          color: tagFilter === t ? "var(--neon-cyan)" : "oklch(0.48 0.03 220)",
                         }}
                       >
                         {t === "All" ? "All Tags" : `#${t}`}
@@ -988,7 +988,7 @@ function TimelinePage() {
         {/* Results Counter */}
         <AnimatePresence>
           {(search || diffFilter !== "All" || tagFilter !== "All") && !isLoading && (
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[10px] mb-5" style={{ color: "oklch(0.50 0.03 220)", fontFamily: MONO }}>
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[10px] mb-5" style={{ color: "var(--timeline-date-color)", fontFamily: MONO }}>
               {filtered.length} result{filtered.length !== 1 ? "s" : ""} found
             </motion.p>
           )}
@@ -998,7 +998,7 @@ function TimelinePage() {
         {isLoading ? (
           <div className="grid lg:grid-cols-[1fr_360px] gap-6">
             <div>{Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}</div>
-            <div className="rounded-xl h-96 animate-pulse" style={{ background: "oklch(0.12 0.04 260)" }} />
+            <div className="rounded-xl h-96 animate-pulse" style={{ background: "var(--surface-hover)" }} />
           </div>
         ) : ee ? (
           <ErrorState onRetry={() => refetch()} />
@@ -1008,7 +1008,7 @@ function TimelinePage() {
             <div>
               {grouped.length === 0 ? (
                 <div className="py-20 text-center">
-                  <p className="text-sm" style={{ color: "oklch(0.45 0.02 220)" }}>No entries match your search.</p>
+                  <p className="text-sm" style={{ color: "var(--muted-foreground)" }}>No entries match your search.</p>
                 </div>
               ) : (
                 grouped.map(([key, group], gi) => {
@@ -1025,12 +1025,12 @@ function TimelinePage() {
                       <div className="flex items-center gap-3 mb-4">
                         <span
                           className="text-xs font-bold tracking-widest uppercase"
-                          style={{ color: "oklch(0.82 0.18 170 / 70%)", fontFamily: MONO }}
+                          style={{ color: "color-mix(in oklch, var(--neon-cyan) 70%, transparent)", fontFamily: MONO }}
                         >
                           {group.label}
                         </span>
                         <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, oklch(0.82 0.18 170 / 25%), transparent)" }} />
-                        <span className="text-[9px]" style={{ color: "oklch(0.40 0.02 220)" }}>
+                        <span className="text-[9px]" style={{ color: "var(--token-dim)" }}>
                           {group.entries.length} {group.entries.length === 1 ? "entry" : "entries"}
                         </span>
                       </div>

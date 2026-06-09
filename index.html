@@ -3,13 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sanskar Phougat — Cybersecurity Researcher & Security Engineer</title>
+    <title>Sanskar Phougat — Cybersecurity Researcher &amp; Security Engineer</title>
     <meta name="description" content="Portfolio of Sanskar Phougat — cybersecurity researcher, offensive security practitioner and builder of cryptographic systems." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <!--
+      Blocking theme script — runs synchronously BEFORE any HTML renders.
+      This is the only reliable way to prevent a flash of wrong theme.
+      DO NOT move this to a useEffect or defer it.
+    -->
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem("portfolio-theme");
+          if (theme === "light") {
+            document.documentElement.setAttribute("data-theme", "light");
+            document.documentElement.classList.remove("dark");
+          } else {
+            document.documentElement.removeAttribute("data-theme");
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="bg-black text-white selection:bg-cyan-500/30 selection:text-cyan-400">
+  <!--
+    DO NOT add text-white or bg-black here — they hard-code colors
+    that fight the CSS custom-property theme system.
+    Body background + text are driven entirely by var(--background) / var(--foreground).
+  -->
+  <body>
     <div id="app"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
