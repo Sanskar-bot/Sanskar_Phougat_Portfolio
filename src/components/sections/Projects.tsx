@@ -6,6 +6,14 @@ import { FiArrowUpRight } from "react-icons/fi";
 
 const projects = [
   {
+    n: "05",
+    title: "VaultZero",
+    tag: "Zero-Knowledge Password Manager",
+    desc: "Local-first credential vault where the server never sees plaintext — only ciphertext. Argon2id key derivation hardens against brute-force, AES-256-GCM encrypts every vault entry client-side, and a phishing-aware browser extension cross-checks autofill targets against the saved origin before releasing credentials. Ships with native Android/iOS autofill integration.",
+    stack: ["TypeScript", "AES-256-GCM", "Argon2id", "Browser Extension", "Android/iOS"],
+    href: "https://github.com/Sanskar-bot/VaultZero",
+  },
+  {
     n: "01",
     title: "PhishingCheck4U",
     tag: "Real-time Phishing Detection",
@@ -62,7 +70,7 @@ export function Projects() {
             </div>
             <h2 className="text-4xl font-bold leading-tight sm:text-6xl">Things I've <span className="text-gradient">shipped.</span></h2>
           </div>
-          <p className="max-w-sm text-sm text-muted-foreground">A mix of security tooling, applied cryptography and backend engineering.</p>
+          <p className="max-w-sm text-sm text-muted-foreground">A mix of security tooling, applied cryptography, and zero-knowledge system design.</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">

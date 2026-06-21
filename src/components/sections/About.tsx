@@ -33,7 +33,7 @@ export function About() {
           </div>
           <div className="about-line space-y-4">
             <div className="glass rounded-2xl p-6"><p className="text-xs uppercase tracking-widest text-muted-foreground">Focus</p><p className="mt-2 font-semibold">Applied Threat Research · Cryptography · Offensive Security</p></div>
-            <div className="glass rounded-2xl p-6"><p className="text-xs uppercase tracking-widest text-muted-foreground">Currently</p><p className="mt-2 font-semibold">Research Intern @ CyberPeace Foundation</p></div>
+            <div className="glass rounded-2xl p-6"><p className="text-xs uppercase tracking-widest text-muted-foreground">Currently</p><p className="mt-2 font-semibold">Research Intern @ CyberPeace Foundation</p><p className="mt-1 text-sm text-muted-foreground">Building VaultZero — a zero-knowledge password manager</p></div>
             <div className="glass rounded-2xl p-6"><p className="text-xs uppercase tracking-widest text-muted-foreground">Education</p><p className="mt-2 font-semibold">B.Tech ECE, JIIT Noida — Class of 2026</p></div>
           </div>
         </div>
