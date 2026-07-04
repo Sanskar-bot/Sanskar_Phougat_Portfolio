@@ -55,7 +55,7 @@ export function Hero() {
               <p className="mt-1">TryHackMe Global</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-foreground">7+</p>
+              <p className="text-2xl font-bold text-foreground">8+</p>
               <p className="mt-1">Security tools shipped</p>
             </div>
             <div>

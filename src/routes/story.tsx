@@ -509,9 +509,46 @@ function RecruiterSnapshot() {
             <span className="text-foreground font-semibold flex items-center gap-1.5">
               VaultZero <span className="text-[9px] px-1.5 py-0.5 rounded" style={{ background: `color-mix(in oklch, ${PURPLE} 9%, transparent)`, color: PURPLE }}>Active</span>
             </span>
-            <p className="text-muted-foreground mt-2 text-[11px] leading-relaxed">
-              Zero-knowledge E2E encrypted password manager built to master secrets storage.
+            {/* One-line vision */}
+            <p className="mt-2 text-[11px] leading-relaxed font-semibold" style={{ color: TEXT }}>
+              Google Password Manager's seamlessness — but built so VaultZero itself can never read what it stores.
             </p>
+            {/* How it works */}
+            <ul className="mt-3 space-y-1.5 text-[10px] leading-relaxed" style={{ color: MUTED }}>
+              <li className="flex items-start gap-2">
+                <span className="h-1 w-1 rounded-full mt-1.5 flex-shrink-0" style={{ background: PURPLE }} />
+                Master password never leaves the device — Argon2id derives the encryption key locally, fresh, every session.
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="h-1 w-1 rounded-full mt-1.5 flex-shrink-0" style={{ background: PURPLE }} />
+                AES-256-GCM encrypts every entry client-side; the server only ever stores ciphertext it cannot decrypt — no master key exists, anywhere, for anyone.
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="h-1 w-1 rounded-full mt-1.5 flex-shrink-0" style={{ background: PURPLE }} />
+                Browser extension and mobile autofill decrypt on-device, with origin-matching to block lookalike phishing domains before autofill ever fires.
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="h-1 w-1 rounded-full mt-1.5 flex-shrink-0" style={{ background: PURPLE }} />
+                A separate recovery key (shown once, at setup) can independently unwrap the vault key — lose both, and the vault is gone by design, not by bug.
+              </li>
+            </ul>
+            {/* Proudest feature callout */}
+            <div
+              className="mt-3 rounded-lg px-3 py-2.5"
+              style={{
+                background: `color-mix(in oklch, ${PURPLE} 5%, transparent)`,
+                border: `1px solid color-mix(in oklch, ${PURPLE} 22%, transparent)`,
+                borderLeft: `2px solid ${PURPLE}`,
+              }}
+            >
+              <span className="text-[9px] font-bold uppercase tracking-wider block mb-1" style={{ color: PURPLE, fontFamily: MONO }}>
+                // Feature I'm proudest of
+              </span>
+              <p className="text-[10px] leading-relaxed" style={{ color: MUTED }}>
+                <span className="font-semibold" style={{ color: TEXT }}>Per-entry sharing PINs.</span>{" "}
+                Each saved credential can carry its own short PIN, independent of the master password. Hand someone your unlocked phone — they type the entry's PIN into VaultZero's intercepted prompt, the real password autofills, and they never see it. The PIN is scoped to that one entry and that one already-unlocked session. Revoking access means changing a PIN, never rotating your real password.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -538,7 +575,7 @@ function PersonalTimeline() {
     { label: "TryHackMe Journey", desc: "Climbed to the top 15% globally while converting theoretical concepts to terminal labs." },
     { label: "Building Projects", desc: "Transitioned to active engineering: built attack labs, secure scrapers, and secure health systems." },
     { label: "Applied Cryptography", desc: "Deep study of ECDH, AES-256-GCM, and designing hybrid encryption wrapper systems." },
-    { label: "VaultZero", desc: "Architecting a secure, zero-knowledge, local-first credentials locker in TypeScript." },
+    { label: "VaultZero", desc: "Building a zero-knowledge password manager in TypeScript: Argon2id key derivation, AES-256-GCM client-side encryption, phishing-aware autofill, dual-path recovery, and per-entry sharing PINs — designed so the server can never read what it stores." },
     { label: "Future Goals", desc: "Bridge the gap between theoretical research and production systems engineering." },
   ];
 
@@ -1234,9 +1271,9 @@ function ProjectsSection() {
       title: "VaultZero",
       tag: "Personal Project",
       color: PURPLE,
-      why: "Built to master zero-knowledge secrets storage. Not because the world needs another manager, but to understand every crypto layer.",
-      what: "Zero-knowledge means server-side blindness. Built in TypeScript with a bar of security high enough for my own data.",
-      learned: "Building what you would personally trust with your own keys forces rigorous architectural decisions.",
+      why: "I wanted Google Password Manager's seamlessness, but with a guarantee Google can't make: the server only ever sees ciphertext. Every design decision followed from that single constraint.",
+      what: "Argon2id derives the vault key locally each session — the master password never leaves the device. AES-256-GCM encrypts every entry client-side. A phishing-aware browser extension verifies the autofill origin before releasing credentials. Dual-path recovery (master password or a one-time recovery key) covers the forgotten-password case while keeping the zero-knowledge guarantee intact. The feature I'm most proud of: per-entry sharing PINs — a way to let someone use a saved login on your unlocked device without ever seeing the real password.",
+      learned: "Designing around a single hard guarantee — server blindness — eliminates entire classes of architectural decisions and forces you to own every trust boundary yourself.",
     },
   ];
 
